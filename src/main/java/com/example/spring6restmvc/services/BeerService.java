@@ -6,4 +6,6 @@ import java.util.UUID;
 
 public interface BeerService {
     Beer getBeerByUUID(UUID id);
+
+    Iterable<Beer> listBeers();
 }

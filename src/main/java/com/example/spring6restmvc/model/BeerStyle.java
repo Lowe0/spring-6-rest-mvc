@@ -1,5 +1,5 @@
 package com.example.spring6restmvc.model;
 
 public enum BeerStyle {
-    CREAM_ALE
+    IPA, SCOTTISH_ALE, CREAM_ALE
 }

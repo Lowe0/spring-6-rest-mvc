@@ -8,4 +8,6 @@ public interface CustomerService {
     Iterable<Customer> listCustomers();
 
     Customer getCustomerById(UUID id);
+
+    Customer addNewCustomer(Customer toAdd);
 }

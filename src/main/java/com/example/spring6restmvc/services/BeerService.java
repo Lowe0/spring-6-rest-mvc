@@ -9,5 +9,5 @@ public interface BeerService {
 
     Iterable<Beer> listBeers();
 
-    Beer saveNewBeer(Beer beer);
+    Beer addNewBeer(Beer toAdd);
 }

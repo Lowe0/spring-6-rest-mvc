@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.UUID;
 
 @Slf4j
@@ -31,8 +30,8 @@ public class BeerController {
     }
 
     @PostMapping
-    public ResponseEntity handlePost(@RequestBody Beer beer) {
-        Beer beerSaved = beerService.saveNewBeer(beer);
+    public ResponseEntity handlePost(@RequestBody Beer toAdd) {
+        Beer beerSaved = beerService.addNewBeer(toAdd);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/api/v1/beer/"+beerSaved.getId());

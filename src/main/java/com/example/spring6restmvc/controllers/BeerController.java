@@ -49,6 +49,16 @@ public class BeerController {
         return new ResponseEntity(headers, HttpStatus.NO_CONTENT);
     }
 
+    @PatchMapping(value = "/{beerId}")
+    public ResponseEntity deltaBeerById(@PathVariable("beerId") UUID id, @RequestBody Beer toUpdate) {
+        Beer beerSaved = beerService.deltaBeerById(id, toUpdate);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/api/v1/beer/" + beerSaved.getId());
+
+        return new ResponseEntity(headers, HttpStatus.NO_CONTENT);
+    }
+
     @DeleteMapping(value = "/{beerId}")
     public ResponseEntity deleteBeerById(@PathVariable("beerId") UUID id) {
         beerService.deleteBeerById(id);

@@ -4,6 +4,7 @@ import com.example.spring6restmvc.model.Beer;
 import com.example.spring6restmvc.model.BeerStyle;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -103,6 +104,32 @@ public class BeerServiceImpl implements BeerService {
         savedBeer.setQuantityOnHand(toUpdate.getQuantityOnHand());
         savedBeer.setUpc(toUpdate.getUpc());
         savedBeer.setPrice(toUpdate.getPrice());
+        savedBeer.setVersion(savedBeer.getVersion() + 1);
+        savedBeer.setUpdatedDate(LocalDateTime.now());
+
+        beerMap.put(id, savedBeer);
+
+        return savedBeer;
+    }
+
+    @Override
+    public Beer deltaBeerById(UUID id, Beer toUpdate) {
+        Beer savedBeer = beerMap.get(id);
+        if (StringUtils.hasText(toUpdate.getBeerName())) {
+            savedBeer.setBeerName(toUpdate.getBeerName());
+        }
+        if (toUpdate.getBeerStyle() != null) {
+            savedBeer.setBeerStyle(toUpdate.getBeerStyle());
+        }
+        if(toUpdate.getQuantityOnHand() != null) {
+            savedBeer.setQuantityOnHand(toUpdate.getQuantityOnHand());
+        }
+        if(StringUtils.hasText(toUpdate.getUpc())) {
+            savedBeer.setUpc(toUpdate.getUpc());
+        }
+        if(toUpdate.getPrice() != null) {
+            savedBeer.setPrice(toUpdate.getPrice());
+        }
         savedBeer.setVersion(savedBeer.getVersion() + 1);
         savedBeer.setUpdatedDate(LocalDateTime.now());
 

@@ -77,13 +77,13 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public Beer addNewBeer(Beer toAdd) {
+    public Beer addBeer(Beer toAdd) {
         Beer savedBeer = Beer.builder()
                 .id(UUID.randomUUID())
+                .version(1)
                 .createdDate(LocalDateTime.now())
                 .updatedDate(LocalDateTime.now())
                 .beerName(toAdd.getBeerName())
-                .version(toAdd.getVersion())
                 .beerStyle(toAdd.getBeerStyle())
                 .quantityOnHand(toAdd.getQuantityOnHand())
                 .upc(toAdd.getUpc())
@@ -103,6 +103,7 @@ public class BeerServiceImpl implements BeerService {
         savedBeer.setQuantityOnHand(toUpdate.getQuantityOnHand());
         savedBeer.setUpc(toUpdate.getUpc());
         savedBeer.setPrice(toUpdate.getPrice());
+        savedBeer.setVersion(savedBeer.getVersion() + 1);
         savedBeer.setUpdatedDate(LocalDateTime.now());
 
         beerMap.put(id, savedBeer);

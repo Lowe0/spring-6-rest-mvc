@@ -9,7 +9,7 @@ public interface BeerService {
 
     Iterable<Beer> listBeers();
 
-    Beer addNewBeer(Beer toAdd);
+    Beer addBeer(Beer toAdd);
 
     Beer updateBeerById(UUID id, Beer toUpdate);
 }

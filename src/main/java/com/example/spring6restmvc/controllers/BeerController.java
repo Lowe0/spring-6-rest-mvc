@@ -4,12 +4,12 @@ import com.example.spring6restmvc.model.Beer;
 import com.example.spring6restmvc.services.BeerService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import java.net.URI;
 import java.util.UUID;
 
 @Slf4j
@@ -32,8 +32,11 @@ public class BeerController {
 
     @PostMapping
     public ResponseEntity handlePost(@RequestBody Beer beer) {
-        var beerSaved = beerService.saveNewBeer(beer);
+        Beer beerSaved = beerService.saveNewBeer(beer);
 
-        return new ResponseEntity(HttpStatus.CREATED);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/api/v1/beer/"+beerSaved.getId());
+
+        return new ResponseEntity(headers, HttpStatus.CREATED);
     }
 }

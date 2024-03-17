@@ -46,6 +46,16 @@ public class CustomerController {
         return new ResponseEntity(headers, HttpStatus.CREATED);
     }
 
+    @PatchMapping(value="/{customerId}")
+    public ResponseEntity deltaCustomerById(@PathVariable("customerId") UUID id, @RequestBody Customer toUpdate) {
+        Customer savedCustomer = customerService.deltaCustomerById(id, toUpdate);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/api/v1/customer/" + id);
+
+        return new ResponseEntity(headers, HttpStatus.CREATED);
+    }
+
     @DeleteMapping(value="/{customerId}")
     public ResponseEntity deleteCustomerById(@PathVariable("customerId") UUID id){
         customerService.deleteCustomerById(id);

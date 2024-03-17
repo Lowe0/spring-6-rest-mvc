@@ -13,5 +13,7 @@ public interface CustomerService {
 
     Customer updateCustomerById(UUID id, Customer toUpdate);
 
+    Customer deltaCustomerById(UUID id, Customer toUpdate);
+
     void deleteCustomerById(UUID id);
 }

@@ -9,5 +9,7 @@ public interface CustomerService {
 
     Customer getCustomerById(UUID id);
 
-    Customer addNewCustomer(Customer toAdd);
+    Customer addCustomer(Customer toAdd);
+
+    Customer updateCustomerById(UUID id, Customer toUpdate);
 }

@@ -46,7 +46,7 @@ public class CustomerController {
         return new ResponseEntity(headers, HttpStatus.CREATED);
     }
 
-    @PatchMapping(value="/{customerId}")
+    @PatchMapping(value = "/{customerId}")
     public ResponseEntity deltaCustomerById(@PathVariable("customerId") UUID id, @RequestBody Customer toUpdate) {
         Customer savedCustomer = customerService.deltaCustomerById(id, toUpdate);
 
@@ -56,8 +56,8 @@ public class CustomerController {
         return new ResponseEntity(headers, HttpStatus.CREATED);
     }
 
-    @DeleteMapping(value="/{customerId}")
-    public ResponseEntity deleteCustomerById(@PathVariable("customerId") UUID id){
+    @DeleteMapping(value = "/{customerId}")
+    public ResponseEntity deleteCustomerById(@PathVariable("customerId") UUID id) {
         customerService.deleteCustomerById(id);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);

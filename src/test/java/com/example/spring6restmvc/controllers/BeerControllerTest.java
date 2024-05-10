@@ -78,9 +78,10 @@ class BeerControllerTest {
         Beer beer = serviceImpl.listBeers().iterator().next();
 
         mockMvc.perform(put("/api/v1/beer/" + beer.getId())
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(beer)));
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beer)))
+                .andExpect(status().isNoContent());
 
         verify(beerService).updateBeerById(any(UUID.class), any(Beer.class));
     }

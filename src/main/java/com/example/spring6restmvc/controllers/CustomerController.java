@@ -38,7 +38,7 @@ public class CustomerController {
 
     @PutMapping(value = "/{customerId}")
     public ResponseEntity updateCustomerById(@PathVariable("customerId") UUID id, @RequestBody Customer toUpdate) {
-        Customer savedCustomer = customerService.updateCustomerById(id, toUpdate);
+        customerService.updateCustomerById(id, toUpdate);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/api/v1/customer/" + id);
@@ -48,7 +48,7 @@ public class CustomerController {
 
     @PatchMapping(value = "/{customerId}")
     public ResponseEntity deltaCustomerById(@PathVariable("customerId") UUID id, @RequestBody Customer toUpdate) {
-        Customer savedCustomer = customerService.deltaCustomerById(id, toUpdate);
+        customerService.deltaCustomerById(id, toUpdate);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/api/v1/customer/" + id);

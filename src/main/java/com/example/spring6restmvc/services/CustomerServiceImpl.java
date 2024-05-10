@@ -69,18 +69,16 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer updateCustomerById(UUID id, Customer toUpdate) {
+    public void updateCustomerById(UUID id, Customer toUpdate) {
         Customer savedCustomer = customerMap.get(id);
         savedCustomer.setCustomerName(toUpdate.getCustomerName());
         savedCustomer.setVersion(savedCustomer.getVersion() + 1);
         savedCustomer.setLastModifiedDate(LocalDateTime.now());
         customerMap.put(id, savedCustomer);
-
-        return savedCustomer;
     }
 
     @Override
-    public Customer deltaCustomerById(UUID id, Customer toUpdate) {
+    public void deltaCustomerById(UUID id, Customer toUpdate) {
         Customer savedCustomer = customerMap.get(id);
         if (StringUtils.hasText(toUpdate.getCustomerName())) {
             savedCustomer.setCustomerName(toUpdate.getCustomerName());
@@ -88,8 +86,6 @@ public class CustomerServiceImpl implements CustomerService {
         savedCustomer.setVersion(savedCustomer.getVersion() + 1);
         savedCustomer.setLastModifiedDate(LocalDateTime.now());
         customerMap.put(id, savedCustomer);
-
-        return savedCustomer;
     }
 
     @Override

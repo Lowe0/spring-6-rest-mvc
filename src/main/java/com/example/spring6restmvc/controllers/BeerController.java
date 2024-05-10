@@ -41,20 +41,20 @@ public class BeerController {
 
     @PutMapping(value = "/{beerId}")
     public ResponseEntity updateBeerById(@PathVariable("beerId") UUID id, @RequestBody Beer toUpdate) {
-        Beer beerSaved = beerService.updateBeerById(id, toUpdate);
+        beerService.updateBeerById(id, toUpdate);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "/api/v1/beer/" + beerSaved.getId());
+        headers.add("Location", "/api/v1/beer/" + id);
 
         return new ResponseEntity(headers, HttpStatus.NO_CONTENT);
     }
 
     @PatchMapping(value = "/{beerId}")
     public ResponseEntity deltaBeerById(@PathVariable("beerId") UUID id, @RequestBody Beer toUpdate) {
-        Beer beerSaved = beerService.deltaBeerById(id, toUpdate);
+        beerService.deltaBeerById(id, toUpdate);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "/api/v1/beer/" + beerSaved.getId());
+        headers.add("Location", "/api/v1/beer/" + id);
 
         return new ResponseEntity(headers, HttpStatus.NO_CONTENT);
     }

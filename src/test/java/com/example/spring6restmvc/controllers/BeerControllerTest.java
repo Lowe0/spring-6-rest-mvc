@@ -3,6 +3,7 @@ package com.example.spring6restmvc.controllers;
 import com.example.spring6restmvc.model.Beer;
 import com.example.spring6restmvc.services.BeerService;
 import com.example.spring6restmvc.services.BeerServiceImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -19,6 +20,9 @@ class BeerControllerTest {
 
     @Autowired
     MockMvc mockMvc;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     @MockBean
     BeerService beerService;
@@ -47,5 +51,12 @@ class BeerControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(testBeer.getId().toString()))
                 .andExpect(jsonPath("$.beerName").value(testBeer.getBeerName()));
+    }
+
+    @Test
+    void createBeer() throws Exception {
+        Beer beer = serviceImpl.listBeers().iterator().next();
+
+        System.out.println(objectMapper.writeValueAsString(beer));
     }
 }

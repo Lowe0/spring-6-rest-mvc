@@ -3,9 +3,10 @@ package com.example.spring6restmvc.controllers;
 import com.example.spring6restmvc.model.Customer;
 import com.example.spring6restmvc.services.CustomerService;
 import com.example.spring6restmvc.services.CustomerServiceImpl;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -14,7 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -29,6 +30,12 @@ class CustomerControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Captor
+    ArgumentCaptor<UUID> uuidArgumentCaptor;
+
+    @Captor
+    ArgumentCaptor<Customer> customerCaptor;
 
     @MockBean
     CustomerService customerService;
@@ -84,6 +91,19 @@ class CustomerControllerTest {
                         .content(objectMapper.writeValueAsString(testCustomer)))
                 .andExpect(status().isNoContent());
 
-        verify(customerService).updateCustomerById(any(UUID.class), any(Customer.class));
+        verify(customerService).updateCustomerById(uuidArgumentCaptor.capture(), customerCaptor.capture());
+        assertThat(uuidArgumentCaptor.getValue()).isEqualTo(testCustomer.getId());
+    }
+
+    @Test
+    void deleteCustomer() throws Exception {
+        Customer testCustomer = customerServiceImpl.listCustomers().iterator().next();
+
+        mockMvc.perform(delete("/api/v1/customer/" + testCustomer.getId())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+
+        verify(customerService).deleteCustomerById(uuidArgumentCaptor.capture());
+        assertThat(uuidArgumentCaptor.getValue()).isEqualTo(testCustomer.getId());
     }
 }

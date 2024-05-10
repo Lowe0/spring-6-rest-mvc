@@ -43,7 +43,7 @@ public class CustomerController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/api/v1/customer/" + id);
 
-        return new ResponseEntity(headers, HttpStatus.CREATED);
+        return new ResponseEntity(headers, HttpStatus.NO_CONTENT);
     }
 
     @PatchMapping(value = "/{customerId}")
@@ -53,7 +53,7 @@ public class CustomerController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/api/v1/customer/" + id);
 
-        return new ResponseEntity(headers, HttpStatus.CREATED);
+        return new ResponseEntity(headers, HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(value = "/{customerId}")

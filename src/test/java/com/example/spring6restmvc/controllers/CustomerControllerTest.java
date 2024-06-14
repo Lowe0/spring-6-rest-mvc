@@ -4,6 +4,7 @@ import com.example.spring6restmvc.model.CustomerDto;
 import com.example.spring6restmvc.services.CustomerService;
 import com.example.spring6restmvc.services.CustomerServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -45,7 +46,12 @@ class CustomerControllerTest {
     @MockBean
     CustomerService customerService;
 
-    CustomerServiceImpl customerServiceImpl = new CustomerServiceImpl();
+    CustomerServiceImpl customerServiceImpl;
+
+    @BeforeEach
+    void setup() {
+        customerServiceImpl = new CustomerServiceImpl();
+    }
 
     @Test
     void listCustomers() throws Exception {

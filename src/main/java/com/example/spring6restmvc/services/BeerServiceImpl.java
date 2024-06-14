@@ -8,10 +8,7 @@ import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -67,9 +64,9 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public Beer getBeerByUUID(UUID id) {
+    public Optional<Beer> getBeerByUUID(UUID id) {
         log.debug("Get Beer by ID - service");
-        return beerMap.get(id);
+        return Optional.of(beerMap.get(id));
     }
 
     @Override

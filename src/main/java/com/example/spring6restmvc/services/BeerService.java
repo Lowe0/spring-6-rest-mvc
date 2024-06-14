@@ -1,20 +1,20 @@
 package com.example.spring6restmvc.services;
 
-import com.example.spring6restmvc.model.Beer;
+import com.example.spring6restmvc.model.BeerDto;
 
 import java.util.Optional;
 import java.util.UUID;
 
 public interface BeerService {
-    Optional<Beer> getBeerByUUID(UUID id);
+    Optional<BeerDto> getBeerByUUID(UUID id);
 
-    Iterable<Beer> listBeers();
+    Iterable<BeerDto> listBeers();
 
-    Beer addBeer(Beer toAdd);
+    BeerDto addBeer(BeerDto toAdd);
 
-    void updateBeerById(UUID id, Beer toUpdate);
+    void updateBeerById(UUID id, BeerDto toUpdate);
 
-    void deltaBeerById(UUID id, Beer toUpdate);
+    void deltaBeerById(UUID id, BeerDto toUpdate);
 
     void deleteBeerById(UUID id);
 }

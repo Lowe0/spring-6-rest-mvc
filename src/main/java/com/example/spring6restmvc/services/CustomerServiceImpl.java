@@ -1,6 +1,6 @@
 package com.example.spring6restmvc.services;
 
-import com.example.spring6restmvc.model.Customer;
+import com.example.spring6restmvc.model.CustomerDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -11,7 +11,7 @@ import java.util.*;
 @Slf4j
 @Service
 public class CustomerServiceImpl implements CustomerService {
-    private Map<UUID, Customer> customerMap;
+    private Map<UUID, CustomerDto> customerMap;
 
     public CustomerServiceImpl() {
         populateMap();
@@ -20,14 +20,14 @@ public class CustomerServiceImpl implements CustomerService {
     private void populateMap() {
         this.customerMap = new HashMap<>();
 
-        Customer kevin = Customer.builder()
+        CustomerDto kevin = CustomerDto.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .customerName("Kevin Lowe")
                 .createdDate(LocalDateTime.now())
                 .lastModifiedDate(LocalDateTime.now()).build();
 
-        Customer cassi = Customer.builder()
+        CustomerDto cassi = CustomerDto.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .customerName("Cassi Lowe")
@@ -39,20 +39,20 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Iterable<Customer> listCustomers() {
+    public Iterable<CustomerDto> listCustomers() {
         log.debug("Customer Service - Get Customers");
         return new ArrayList<>(customerMap.values());
     }
 
     @Override
-    public Optional<Customer> getCustomerById(UUID id) {
+    public Optional<CustomerDto> getCustomerById(UUID id) {
         log.debug("Customer Service - Get Customer - " + id);
         return Optional.of(customerMap.get(id));
     }
 
     @Override
-    public Customer addCustomer(Customer toAdd) {
-        Customer savedCustomer = Customer.builder()
+    public CustomerDto addCustomer(CustomerDto toAdd) {
+        CustomerDto savedCustomer = CustomerDto.builder()
                 .id(UUID.randomUUID())
                 .customerName(toAdd.getCustomerName())
                 .version(toAdd.getVersion())
@@ -66,8 +66,8 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void updateCustomerById(UUID id, Customer toUpdate) {
-        Customer savedCustomer = customerMap.get(id);
+    public void updateCustomerById(UUID id, CustomerDto toUpdate) {
+        CustomerDto savedCustomer = customerMap.get(id);
         savedCustomer.setCustomerName(toUpdate.getCustomerName());
         savedCustomer.setVersion(savedCustomer.getVersion() + 1);
         savedCustomer.setLastModifiedDate(LocalDateTime.now());
@@ -75,8 +75,8 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void deltaCustomerById(UUID id, Customer toUpdate) {
-        Customer savedCustomer = customerMap.get(id);
+    public void deltaCustomerById(UUID id, CustomerDto toUpdate) {
+        CustomerDto savedCustomer = customerMap.get(id);
         if (StringUtils.hasText(toUpdate.getCustomerName())) {
             savedCustomer.setCustomerName(toUpdate.getCustomerName());
         }

@@ -1,6 +1,6 @@
 package com.example.spring6restmvc.controllers;
 
-import com.example.spring6restmvc.model.Customer;
+import com.example.spring6restmvc.model.CustomerDto;
 import com.example.spring6restmvc.services.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -19,18 +18,18 @@ public class CustomerController {
     public static final String CUSTOMER_PATH_ID = CUSTOMER_PATH + "/{customerId}";
 
     @GetMapping(CUSTOMER_PATH)
-    public Iterable<Customer> listCustomers() {
+    public Iterable<CustomerDto> listCustomers() {
         return customerService.listCustomers();
     }
 
     @GetMapping(CUSTOMER_PATH_ID)
-    public Customer getCustomerById(@PathVariable("customerId") UUID id) {
+    public CustomerDto getCustomerById(@PathVariable("customerId") UUID id) {
         return customerService.getCustomerById(id).orElseThrow(NotFoundException::new);
     }
 
     @PostMapping(CUSTOMER_PATH)
-    public ResponseEntity addCustomer(@RequestBody Customer toAdd) {
-        Customer savedCustomer = customerService.addCustomer(toAdd);
+    public ResponseEntity addCustomer(@RequestBody CustomerDto toAdd) {
+        CustomerDto savedCustomer = customerService.addCustomer(toAdd);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", CUSTOMER_PATH + "/" + savedCustomer.getId());
@@ -39,7 +38,7 @@ public class CustomerController {
     }
 
     @PutMapping(value = CUSTOMER_PATH_ID)
-    public ResponseEntity updateCustomerById(@PathVariable("customerId") UUID id, @RequestBody Customer toUpdate) {
+    public ResponseEntity updateCustomerById(@PathVariable("customerId") UUID id, @RequestBody CustomerDto toUpdate) {
         customerService.updateCustomerById(id, toUpdate);
 
         HttpHeaders headers = new HttpHeaders();
@@ -49,7 +48,7 @@ public class CustomerController {
     }
 
     @PatchMapping(value = CUSTOMER_PATH_ID)
-    public ResponseEntity deltaCustomerById(@PathVariable("customerId") UUID id, @RequestBody Customer toUpdate) {
+    public ResponseEntity deltaCustomerById(@PathVariable("customerId") UUID id, @RequestBody CustomerDto toUpdate) {
         customerService.deltaCustomerById(id, toUpdate);
 
         HttpHeaders headers = new HttpHeaders();

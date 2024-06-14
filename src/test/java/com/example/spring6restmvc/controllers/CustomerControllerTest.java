@@ -1,6 +1,6 @@
 package com.example.spring6restmvc.controllers;
 
-import com.example.spring6restmvc.model.Customer;
+import com.example.spring6restmvc.model.CustomerDto;
 import com.example.spring6restmvc.services.CustomerService;
 import com.example.spring6restmvc.services.CustomerServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,7 +40,7 @@ class CustomerControllerTest {
     ArgumentCaptor<UUID> uuidArgumentCaptor;
 
     @Captor
-    ArgumentCaptor<Customer> customerCaptor;
+    ArgumentCaptor<CustomerDto> customerCaptor;
 
     @MockBean
     CustomerService customerService;
@@ -62,7 +62,7 @@ class CustomerControllerTest {
 
     @Test
     void getCustomerById() throws Exception {
-        Customer testCustomer = customerServiceImpl.listCustomers().iterator().next();
+        CustomerDto testCustomer = customerServiceImpl.listCustomers().iterator().next();
         // again, this works fine for now, until we have a real data store
         given(customerService.getCustomerById(testCustomer.getId())).willReturn(Optional.of(testCustomer));
         mockMvc.perform(get(CUSTOMER_PATH_ID, testCustomer.getId())
@@ -87,11 +87,11 @@ class CustomerControllerTest {
 
     @Test
     void addCustomer() throws Exception {
-        Customer testCustomer = customerServiceImpl.listCustomers().iterator().next();
+        CustomerDto testCustomer = customerServiceImpl.listCustomers().iterator().next();
         testCustomer.setVersion(null);
         testCustomer.setId(null);
 
-        given(customerService.addCustomer(any(Customer.class))).willReturn(customerServiceImpl.listCustomers().iterator().next());
+        given(customerService.addCustomer(any(CustomerDto.class))).willReturn(customerServiceImpl.listCustomers().iterator().next());
         mockMvc.perform(post(CUSTOMER_PATH)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -104,7 +104,7 @@ class CustomerControllerTest {
 
     @Test
     void updateCustomer() throws Exception {
-        Customer testCustomer = customerServiceImpl.listCustomers().iterator().next();
+        CustomerDto testCustomer = customerServiceImpl.listCustomers().iterator().next();
 
         mockMvc.perform(put(CUSTOMER_PATH_ID, testCustomer.getId())
                         .accept(MediaType.APPLICATION_JSON)
@@ -118,7 +118,7 @@ class CustomerControllerTest {
 
     @Test
     void deleteCustomer() throws Exception {
-        Customer testCustomer = customerServiceImpl.listCustomers().iterator().next();
+        CustomerDto testCustomer = customerServiceImpl.listCustomers().iterator().next();
 
         mockMvc.perform(delete(CUSTOMER_PATH_ID, testCustomer.getId())
                 .accept(MediaType.APPLICATION_JSON))
@@ -130,7 +130,7 @@ class CustomerControllerTest {
 
     @Test
     void deltaCustomer() throws Exception {
-        Customer testCustomer = customerServiceImpl.listCustomers().iterator().next();
+        CustomerDto testCustomer = customerServiceImpl.listCustomers().iterator().next();
 
         Map<String, Object> customerMap = new HashMap<>();
         customerMap.put("customerName", "New Name");

@@ -1,6 +1,6 @@
 package com.example.spring6restmvc.controllers;
 
-import com.example.spring6restmvc.model.Beer;
+import com.example.spring6restmvc.model.BeerDto;
 import com.example.spring6restmvc.services.BeerService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,19 +20,19 @@ public class BeerController {
     public static final String BEER_PATH_ID = BEER_PATH + "/{beerId}";
 
     @GetMapping(value = BEER_PATH)
-    public Iterable<Beer> listBeers() {
+    public Iterable<BeerDto> listBeers() {
         return beerService.listBeers();
     }
 
     @GetMapping(value = BEER_PATH_ID)
-    public Beer getBeerById(@PathVariable("beerId") UUID id) {
+    public BeerDto getBeerById(@PathVariable("beerId") UUID id) {
         log.debug("Get Beer by ID - controller");
         return beerService.getBeerByUUID(id).orElseThrow(NotFoundException::new);
     }
 
     @PostMapping(value = BEER_PATH)
-    public ResponseEntity addBeer(@RequestBody Beer toAdd) {
-        Beer beerSaved = beerService.addBeer(toAdd);
+    public ResponseEntity addBeer(@RequestBody BeerDto toAdd) {
+        BeerDto beerSaved = beerService.addBeer(toAdd);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", BEER_PATH + "/" + beerSaved.getId());
@@ -41,7 +41,7 @@ public class BeerController {
     }
 
     @PutMapping(value = BEER_PATH_ID)
-    public ResponseEntity updateBeerById(@PathVariable("beerId") UUID id, @RequestBody Beer toUpdate) {
+    public ResponseEntity updateBeerById(@PathVariable("beerId") UUID id, @RequestBody BeerDto toUpdate) {
         beerService.updateBeerById(id, toUpdate);
 
         HttpHeaders headers = new HttpHeaders();
@@ -51,7 +51,7 @@ public class BeerController {
     }
 
     @PatchMapping(value = BEER_PATH_ID)
-    public ResponseEntity deltaBeerById(@PathVariable("beerId") UUID id, @RequestBody Beer toUpdate) {
+    public ResponseEntity deltaBeerById(@PathVariable("beerId") UUID id, @RequestBody BeerDto toUpdate) {
         beerService.deltaBeerById(id, toUpdate);
 
         HttpHeaders headers = new HttpHeaders();

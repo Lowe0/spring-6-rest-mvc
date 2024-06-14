@@ -13,6 +13,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -112,5 +114,23 @@ class CustomerControllerTest {
 
         verify(customerService).deleteCustomerById(uuidArgumentCaptor.capture());
         assertThat(uuidArgumentCaptor.getValue()).isEqualTo(testCustomer.getId());
+    }
+
+    @Test
+    void deltaCustomer() throws Exception {
+        Customer testCustomer = customerServiceImpl.listCustomers().iterator().next();
+
+        Map<String, Object> customerMap = new HashMap<>();
+        customerMap.put("customerName", "New Name");
+
+        mockMvc.perform(patch("/api/v1/customer/" + testCustomer.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(customerMap)))
+                .andExpect(status().isNoContent());
+
+        verify(customerService).deltaCustomerById(uuidArgumentCaptor.capture(), customerCaptor.capture());
+        assertThat(uuidArgumentCaptor.getValue()).isEqualTo(testCustomer.getId());
+        assertThat(customerCaptor.getValue().getCustomerName()).isEqualTo(customerMap.get("customerName"));
     }
 }

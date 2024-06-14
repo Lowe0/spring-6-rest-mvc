@@ -74,7 +74,7 @@ class BeerControllerTest {
     }
 
     @Test
-    void createBeer() throws Exception {
+    void addBeer() throws Exception {
         Beer beer = serviceImpl.listBeers().iterator().next();
         beer.setVersion(null);
         beer.setId(null);

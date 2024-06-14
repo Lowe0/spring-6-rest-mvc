@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static com.example.spring6restmvc.controllers.CustomerController.CUSTOMER_PATH;
+import static com.example.spring6restmvc.controllers.CustomerController.CUSTOMER_PATH_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -63,7 +64,7 @@ class CustomerControllerTest {
         Customer testCustomer = customerServiceImpl.listCustomers().iterator().next();
         // again, this works fine for now, until we have a real data store
         given(customerService.getCustomerById(testCustomer.getId())).willReturn(testCustomer);
-        mockMvc.perform(get(CUSTOMER_PATH + "/" + testCustomer.getId())
+        mockMvc.perform(get(CUSTOMER_PATH_ID, testCustomer.getId())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -95,7 +96,7 @@ class CustomerControllerTest {
     void updateCustomer() throws Exception {
         Customer testCustomer = customerServiceImpl.listCustomers().iterator().next();
 
-        mockMvc.perform(put(CUSTOMER_PATH + "/" + testCustomer.getId())
+        mockMvc.perform(put(CUSTOMER_PATH_ID, testCustomer.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testCustomer)))
@@ -109,7 +110,7 @@ class CustomerControllerTest {
     void deleteCustomer() throws Exception {
         Customer testCustomer = customerServiceImpl.listCustomers().iterator().next();
 
-        mockMvc.perform(delete(CUSTOMER_PATH + "/" + testCustomer.getId())
+        mockMvc.perform(delete(CUSTOMER_PATH_ID, testCustomer.getId())
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
@@ -124,7 +125,7 @@ class CustomerControllerTest {
         Map<String, Object> customerMap = new HashMap<>();
         customerMap.put("customerName", "New Name");
 
-        mockMvc.perform(patch(CUSTOMER_PATH + "/" + testCustomer.getId())
+        mockMvc.perform(patch(CUSTOMER_PATH_ID, testCustomer.getId())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(customerMap)))

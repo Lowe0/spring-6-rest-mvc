@@ -13,6 +13,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -106,5 +108,23 @@ class BeerControllerTest {
 
         verify(beerService).deleteBeerById(uuidArgumentCaptor.capture());
         assertThat(uuidArgumentCaptor.getValue()).isEqualTo(beer.getId());
+    }
+
+    @Test
+    void deltaBeer() throws Exception {
+        Beer beer = serviceImpl.listBeers().iterator().next();
+
+        Map<String, Object> beerMap = new HashMap<>();
+        beerMap.put("beerName", "New Name");
+
+        mockMvc.perform(patch("/api/v1/beer/" + beer.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beerMap)))
+                .andExpect(status().isNoContent());
+
+        verify(beerService).deltaBeerById(uuidArgumentCaptor.capture(), beerArgumentCaptor.capture());
+        assertThat(uuidArgumentCaptor.getValue()).isEqualTo(beer.getId());
+        assertThat(beerArgumentCaptor.getValue().getBeerName()).isEqualTo(beerMap.get("beerName"));
     }
 }

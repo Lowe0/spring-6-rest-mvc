@@ -51,6 +51,8 @@ class CustomerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.length()").value(2));
+
+        verify(customerService).listCustomers();
     }
 
     @Test
@@ -64,6 +66,9 @@ class CustomerControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(testCustomer.getId().toString()))
                 .andExpect(jsonPath("$.customerName").value(testCustomer.getCustomerName()));
+
+        verify(customerService).getCustomerById(uuidArgumentCaptor.capture());
+        assertThat(uuidArgumentCaptor.getValue()).isEqualTo(testCustomer.getId());
     }
 
     @Test
@@ -72,13 +77,15 @@ class CustomerControllerTest {
         testCustomer.setVersion(null);
         testCustomer.setId(null);
 
-        given(customerService.addCustomer(testCustomer)).willReturn(customerServiceImpl.listCustomers().iterator().next());
+        given(customerService.addCustomer(any(Customer.class))).willReturn(customerServiceImpl.listCustomers().iterator().next());
         mockMvc.perform(post("/api/v1/customer")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testCustomer)))
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"));
+        verify(customerService).addCustomer(customerCaptor.capture());
+        assertThat(customerCaptor.getValue()).isEqualTo(testCustomer);
     }
 
     @Test

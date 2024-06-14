@@ -52,6 +52,8 @@ class BeerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.length()").value(3));
+
+        verify(beerService).listBeers();
     }
 
     @Test
@@ -66,6 +68,9 @@ class BeerControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(testBeer.getId().toString()))
                 .andExpect(jsonPath("$.beerName").value(testBeer.getBeerName()));
+
+        verify(beerService).getBeerByUUID(uuidArgumentCaptor.capture());
+        assertThat(uuidArgumentCaptor.getValue()).isEqualTo(testBeer.getId());
     }
 
     @Test
@@ -82,6 +87,9 @@ class BeerControllerTest {
                         .content(objectMapper.writeValueAsString(beer)))
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"));
+
+        verify(beerService).addBeer(beerArgumentCaptor.capture());
+        assertThat(beerArgumentCaptor.getValue()).isEqualTo(beer);
     }
 
     @Test

@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.example.spring6restmvc.controllers.BeerController.BEER_PATH;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -48,7 +49,7 @@ class BeerControllerTest {
     void getAllBeers() throws Exception {
         given(beerService.listBeers()).willReturn(serviceImpl.listBeers());
 
-        mockMvc.perform(get("/api/v1/beer"))
+        mockMvc.perform(get(BEER_PATH))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.length()").value(3));
@@ -62,7 +63,7 @@ class BeerControllerTest {
 
         given(beerService.getBeerByUUID(testBeer.getId())).willReturn(testBeer);
 
-        mockMvc.perform(get("/api/v1/beer/" + testBeer.getId())
+        mockMvc.perform(get(BEER_PATH + "/" + testBeer.getId())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -81,7 +82,7 @@ class BeerControllerTest {
 
         given(beerService.addBeer(any(Beer.class))).willReturn(serviceImpl.listBeers().iterator().next());
 
-        mockMvc.perform(post("/api/v1/beer")
+        mockMvc.perform(post(BEER_PATH)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beer)))
@@ -96,7 +97,7 @@ class BeerControllerTest {
     void updateBeer() throws Exception {
         Beer beer = serviceImpl.listBeers().iterator().next();
 
-        mockMvc.perform(put("/api/v1/beer/" + beer.getId())
+        mockMvc.perform(put(BEER_PATH + "/" + beer.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beer)))
@@ -110,7 +111,7 @@ class BeerControllerTest {
     void deleteBeer() throws Exception {
         Beer beer = serviceImpl.listBeers().iterator().next();
 
-        mockMvc.perform(delete("/api/v1/beer/" + beer.getId())
+        mockMvc.perform(delete(BEER_PATH + "/" + beer.getId())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
@@ -125,7 +126,7 @@ class BeerControllerTest {
         Map<String, Object> beerMap = new HashMap<>();
         beerMap.put("beerName", "New Name");
 
-        mockMvc.perform(patch("/api/v1/beer/" + beer.getId())
+        mockMvc.perform(patch(BEER_PATH + "/" + beer.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beerMap)))

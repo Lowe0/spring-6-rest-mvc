@@ -4,16 +4,18 @@ import com.example.spring6restmvc.model.BeerStyle;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Version;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Beer {
     @Id
     private UUID id;

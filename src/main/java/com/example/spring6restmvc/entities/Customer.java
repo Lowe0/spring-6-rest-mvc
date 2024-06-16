@@ -3,15 +3,17 @@ package com.example.spring6restmvc.entities;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Version;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Customer {
     @Id
     private UUID id;

@@ -1,9 +1,8 @@
 package com.example.spring6restmvc.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Version;
+import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -16,6 +15,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Customer {
     @Id
+    @UuidGenerator
+    @Column(columnDefinition = "varchar", length = 36, updatable = false, nullable = false)
     private UUID id;
     @Version
     private Integer version;

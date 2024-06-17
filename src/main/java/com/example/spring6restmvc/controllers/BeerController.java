@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
+import java.util.List;
 
 @Slf4j
 @AllArgsConstructor
@@ -20,7 +21,7 @@ public class BeerController {
     public static final String BEER_PATH_ID = BEER_PATH + "/{beerId}";
 
     @GetMapping(value = BEER_PATH)
-    public Iterable<BeerDto> listBeers() {
+    public List<BeerDto> listBeers() {
         return beerService.listBeers();
     }
 

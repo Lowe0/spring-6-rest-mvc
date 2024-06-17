@@ -21,7 +21,7 @@ class BeerControllerIntegrationTest {
 
     @Test
     void listBeers() {
-        Iterable<BeerDto> beerDtos = beerController.listBeers();
+        List<BeerDto> beerDtos = beerController.listBeers();
         assertNotNull(beerDtos);
     }
 }

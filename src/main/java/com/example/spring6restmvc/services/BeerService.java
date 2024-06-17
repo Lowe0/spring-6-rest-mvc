@@ -2,11 +2,12 @@ package com.example.spring6restmvc.services;
 
 import com.example.spring6restmvc.model.BeerDto;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface BeerService {
-    Iterable<BeerDto> listBeers();
+    List<BeerDto> listBeers();
 
     Optional<BeerDto> getBeerByUUID(UUID id);
 

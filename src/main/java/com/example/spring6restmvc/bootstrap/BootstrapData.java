@@ -6,12 +6,14 @@ import com.example.spring6restmvc.model.BeerStyle;
 import com.example.spring6restmvc.repositories.BeerRepository;
 import com.example.spring6restmvc.repositories.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class BootstrapData implements CommandLineRunner {
@@ -56,9 +58,11 @@ public class BootstrapData implements CommandLineRunner {
                     .updatedDate(LocalDateTime.now())
                     .build();
 
+            log.debug("Initializing beer");
             beerRepository.save(sunlight);
             beerRepository.save(osiris);
             beerRepository.save(weeMac);
+            log.debug("Beer initialized");
         }
     }
 
@@ -74,8 +78,10 @@ public class BootstrapData implements CommandLineRunner {
                     .createdDate(LocalDateTime.now())
                     .lastModifiedDate(LocalDateTime.now()).build();
 
+            log.debug("Initializing customer");
             customerRepository.save(kevin);
             customerRepository.save(cassi);
+            log.debug("Customer initialized");
         }
     }
 }

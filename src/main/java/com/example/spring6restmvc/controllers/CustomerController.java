@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -18,7 +19,7 @@ public class CustomerController {
     public static final String CUSTOMER_PATH_ID = CUSTOMER_PATH + "/{customerId}";
 
     @GetMapping(CUSTOMER_PATH)
-    public Iterable<CustomerDto> listCustomers() {
+    public List<CustomerDto> listCustomers() {
         return customerService.listCustomers();
     }
 

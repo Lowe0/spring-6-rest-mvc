@@ -39,7 +39,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Iterable<CustomerDto> listCustomers() {
+    public List<CustomerDto> listCustomers() {
         log.debug("Customer Service - Get Customers");
         return new ArrayList<>(customerMap.values());
     }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Primary
@@ -18,13 +19,17 @@ public class BeerServiceJPA implements BeerService {
     private final BeerMapper beerMapper;
 
     @Override
-    public Optional<BeerDto> getBeerByUUID(UUID id) {
-        return Optional.empty();
+    public Iterable<BeerDto> listBeers() {
+        return beerRepository
+                .findAll()
+                .stream()
+                .map(beerMapper::beerToBeerDto)
+                .collect(Collectors.toSet());
     }
 
     @Override
-    public Iterable<BeerDto> listBeers() {
-        return null;
+    public Optional<BeerDto> getBeerByUUID(UUID id) {
+        return Optional.ofNullable(beerRepository.findById(id).orElse(null)).map(beerMapper::beerToBeerDto);
     }
 
     @Override

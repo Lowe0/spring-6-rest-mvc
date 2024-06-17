@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class BeerControllerIntegrationTest {
@@ -23,7 +22,7 @@ class BeerControllerIntegrationTest {
     @Test
     void listBeers() {
         List<BeerDto> beerDtos = beerController.listBeers();
-        assertNotNull(beerDtos);
+        assertThat(beerDtos).isNotNull();
         assertThat(beerDtos.size()).isEqualTo(3);
     }
 
@@ -33,7 +32,7 @@ class BeerControllerIntegrationTest {
     void listBeers_Empty() {
         beerRepository.deleteAll();
         List<BeerDto> beerDtos = beerController.listBeers();
-        assertNotNull(beerDtos);
+        assertThat(beerDtos).isNotNull();
         assertThat(beerDtos.size()).isEqualTo(0);
 
     }

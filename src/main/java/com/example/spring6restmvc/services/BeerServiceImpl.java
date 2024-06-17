@@ -64,14 +64,14 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public Optional<BeerDto> getBeerByUUID(UUID id) {
-        log.debug("Get Beer by ID - service");
-        return Optional.of(beerMap.get(id));
+    public Iterable<BeerDto> listBeers() {
+        return new ArrayList<>(beerMap.values());
     }
 
     @Override
-    public Iterable<BeerDto> listBeers() {
-        return new ArrayList<>(beerMap.values());
+    public Optional<BeerDto> getBeerByUUID(UUID id) {
+        log.debug("Get Beer by ID - service");
+        return Optional.of(beerMap.get(id));
     }
 
     @Override

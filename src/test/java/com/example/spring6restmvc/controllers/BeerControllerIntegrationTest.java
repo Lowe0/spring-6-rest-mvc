@@ -23,5 +23,6 @@ class BeerControllerIntegrationTest {
     void listBeers() {
         List<BeerDto> beerDtos = beerController.listBeers();
         assertNotNull(beerDtos);
+        assertThat(beerDtos.size()).isEqualTo(3);
     }
 }

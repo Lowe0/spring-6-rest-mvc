@@ -43,7 +43,9 @@ public class BeerController {
 
     @PutMapping(value = BEER_PATH_ID)
     public ResponseEntity updateBeerById(@PathVariable("beerId") UUID id, @RequestBody BeerDto toUpdate) {
-        beerService.updateBeerById(id, toUpdate);
+        beerService.updateBeerById(id, toUpdate).ifPresentOrElse(x -> {}, () -> {
+            throw new NotFoundException();
+        });
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", BEER_PATH + "/" + id);

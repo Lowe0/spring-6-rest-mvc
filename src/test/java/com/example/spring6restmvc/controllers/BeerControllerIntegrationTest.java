@@ -101,4 +101,11 @@ class BeerControllerIntegrationTest {
         assertThat(beerAfterUpdate.getPrice()).isEqualTo(toUpdate.getPrice());
         assertThat(beerAfterUpdate.getUpc()).isEqualTo(toUpdate.getUpc());
     }
+
+    @Transactional
+    @Rollback
+    @Test
+    void updateBeer_NotFound_ThrowsException() {
+        assertThrows(NotFoundException.class, () -> beerController.updateBeerById(UUID.randomUUID(), BeerDto.builder().build()));
+    }
 }

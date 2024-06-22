@@ -3,6 +3,8 @@ package com.example.spring6restmvc.entities;
 import com.example.spring6restmvc.model.BeerStyle;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.math.BigDecimal;
@@ -27,6 +29,8 @@ public class Beer {
     private String upc;
     private Integer quantityOnHand;
     private BigDecimal price;
+    @CreationTimestamp
     private LocalDateTime createdDate;
+    @UpdateTimestamp
     private LocalDateTime updatedDate;
 }

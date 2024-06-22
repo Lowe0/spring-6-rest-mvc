@@ -1,6 +1,7 @@
 package com.example.spring6restmvc.controllers;
 
 import com.example.spring6restmvc.entities.Beer;
+import com.example.spring6restmvc.mappers.BeerMapper;
 import com.example.spring6restmvc.model.BeerDto;
 import com.example.spring6restmvc.repositories.BeerRepository;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,8 @@ class BeerControllerIntegrationTest {
     BeerController beerController;
     @Autowired
     BeerRepository beerRepository;
+    @Autowired
+    BeerMapper beerMapper;
 
     @Test
     void listBeers() {
@@ -72,5 +75,30 @@ class BeerControllerIntegrationTest {
         Beer addedBeer = beerRepository.findById(UUID.fromString(uuid)).get();
         assertThat(addedBeer).isNotNull();
         assertThat(addedBeer.getBeerName()).isEqualTo(toAdd.getBeerName());
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    void updateBeer() {
+        Beer beerBeforeUpdate = beerRepository.findAll().get(0);
+        BeerDto toUpdate = beerMapper.beerToBeerDto(beerBeforeUpdate);
+        toUpdate.setId(null);
+        toUpdate.setVersion(null);
+        toUpdate.setBeerName("Updated Beer");
+
+        ResponseEntity response = beerController.updateBeerById(beerBeforeUpdate.getId(), toUpdate);
+        assertThat(response).isNotNull();
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(response.getHeaders()).containsKey("Location");
+        String uuid = response.getHeaders().getLocation().getPath().split("/")[4];
+
+        Beer beerAfterUpdate = beerRepository.findById(UUID.fromString(uuid)).get();
+        assertThat(beerAfterUpdate).isNotNull();
+        assertThat(beerAfterUpdate.getId()).isEqualTo(beerBeforeUpdate.getId());
+        assertThat(beerAfterUpdate.getBeerName()).isEqualTo(toUpdate.getBeerName());
+        assertThat(beerAfterUpdate.getBeerStyle()).isEqualTo(toUpdate.getBeerStyle());
+        assertThat(beerAfterUpdate.getPrice()).isEqualTo(toUpdate.getPrice());
+        assertThat(beerAfterUpdate.getUpc()).isEqualTo(toUpdate.getUpc());
     }
 }

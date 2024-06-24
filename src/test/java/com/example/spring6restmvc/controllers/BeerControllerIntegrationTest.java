@@ -62,9 +62,7 @@ class BeerControllerIntegrationTest {
     @Rollback
     @Test
     void addBeer() {
-        BeerDto toAdd = BeerDto.builder()
-                .beerName("New Beer")
-                .build();
+        BeerDto toAdd = BeerDto.builder().beerName("New Beer").build();
 
         ResponseEntity response = beerController.addBeer(toAdd);
         assertThat(response).isNotNull();

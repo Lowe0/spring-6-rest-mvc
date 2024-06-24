@@ -130,7 +130,7 @@ class BeerControllerTest {
     void deleteBeer() throws Exception {
         BeerDto beer = beerServiceImpl.listBeers().iterator().next();
 
-        given(beerService.deleteBeerById(any(UUID.class))).willReturn(Optional.of(beer));
+        given(beerService.deleteBeerById(any(UUID.class))).willReturn(true);
 
         mockMvc.perform(delete(BEER_PATH_ID, beer.getId())
                         .accept(MediaType.APPLICATION_JSON))

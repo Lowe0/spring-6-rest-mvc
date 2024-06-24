@@ -114,7 +114,7 @@ class BeerControllerIntegrationTest {
         Beer beerBeforeDelete = beerRepository.findAll().get(0);
         beerController.deleteBeerById(beerBeforeDelete.getId());
 
-        assertThat(beerRepository.findById(beerBeforeDelete.getId()).isPresent()).isFalse();
+        assertThat(beerRepository.existsById(beerBeforeDelete.getId())).isFalse();
     }
 
     @Transactional

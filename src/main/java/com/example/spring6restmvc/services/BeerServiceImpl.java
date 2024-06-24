@@ -133,7 +133,8 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public void deleteBeerById(UUID id) {
+    public Optional<BeerDto> deleteBeerById(UUID id) {
         beerMap.remove(id);
+        return null;
     }
 }

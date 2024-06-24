@@ -116,4 +116,11 @@ class BeerControllerIntegrationTest {
 
         assertThat(beerRepository.findById(beerBeforeDelete.getId()).isPresent()).isFalse();
     }
+
+    @Transactional
+    @Rollback
+    @Test
+    void deleteBeer_NotFound_ThrowsException() {
+        assertThrows(NotFoundException.class, () -> beerController.deleteBeerById(UUID.randomUUID()));
+    }
 }

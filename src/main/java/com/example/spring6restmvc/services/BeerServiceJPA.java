@@ -61,6 +61,9 @@ public class BeerServiceJPA implements BeerService {
 
     @Override
     public void deleteBeerById(UUID id) {
-
+        AtomicReference<Optional<BeerDto>> refDeleted = new AtomicReference<>();
+        beerRepository.findById(id).ifPresentOrElse(x -> {
+            beerRepository.delete(x);
+        }, () -> refDeleted.set(Optional.empty()));
     }
 }

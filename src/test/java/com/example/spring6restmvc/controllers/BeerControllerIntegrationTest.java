@@ -106,4 +106,14 @@ class BeerControllerIntegrationTest {
     void updateBeer_NotFound_ThrowsException() {
         assertThrows(NotFoundException.class, () -> beerController.updateBeerById(UUID.randomUUID(), BeerDto.builder().build()));
     }
+
+    @Transactional
+    @Rollback
+    @Test
+    void deleteBeer() {
+        Beer beerBeforeDelete = beerRepository.findAll().get(0);
+        beerController.deleteBeerById(beerBeforeDelete.getId());
+
+        assertThat(beerRepository.findById(beerBeforeDelete.getId()).isPresent()).isFalse();
+    }
 }

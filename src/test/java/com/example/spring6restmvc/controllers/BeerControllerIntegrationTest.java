@@ -110,6 +110,35 @@ class BeerControllerIntegrationTest {
     @Transactional
     @Rollback
     @Test
+    void deltaBeer() {
+        Beer beerBeforeUpdate = beerRepository.findAll().get(0);
+        BeerDto toUpdate = BeerDto.builder().beerName("Updated Beer").build();
+
+        ResponseEntity response = beerController.deltaBeerById(beerBeforeUpdate.getId(), toUpdate);
+        assertThat(response).isNotNull();
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(response.getHeaders()).containsKey("Location");
+        String uuid = response.getHeaders().getLocation().getPath().split("/")[4];
+
+        Beer beerAfterUpdate = beerRepository.findById(UUID.fromString(uuid)).get();
+        assertThat(beerAfterUpdate).isNotNull();
+        assertThat(beerAfterUpdate.getId()).isEqualTo(beerBeforeUpdate.getId());
+        assertThat(beerAfterUpdate.getBeerName()).isEqualTo(toUpdate.getBeerName());
+        assertThat(beerAfterUpdate.getBeerStyle()).isEqualTo(beerBeforeUpdate.getBeerStyle());
+        assertThat(beerAfterUpdate.getPrice()).isEqualTo(beerBeforeUpdate.getPrice());
+        assertThat(beerAfterUpdate.getUpc()).isEqualTo(beerBeforeUpdate.getUpc());
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    void deltaBeer_NotFound_ThrowsException() {
+        assertThrows(NotFoundException.class, () -> beerController.deltaBeerById(UUID.randomUUID(), BeerDto.builder().build()));
+    }
+
+    @Transactional
+    @Rollback
+    @Test
     void deleteBeer() {
         Beer beerBeforeDelete = beerRepository.findAll().get(0);
         beerController.deleteBeerById(beerBeforeDelete.getId());

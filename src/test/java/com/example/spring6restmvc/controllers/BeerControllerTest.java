@@ -144,6 +144,8 @@ class BeerControllerTest {
     void deltaBeer() throws Exception {
         BeerDto beer = beerServiceImpl.listBeers().iterator().next();
 
+        given(beerService.deltaBeerById(any(UUID.class), any(BeerDto.class))).willReturn(Optional.of(beer));
+
         Map<String, Object> beerMap = new HashMap<>();
         beerMap.put("beerName", "New Name");
 

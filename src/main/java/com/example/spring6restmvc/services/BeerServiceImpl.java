@@ -109,7 +109,7 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public void deltaBeerById(UUID id, BeerDto toUpdate) {
+    public Optional<BeerDto> deltaBeerById(UUID id, BeerDto toUpdate) {
         BeerDto savedBeer = beerMap.get(id);
         if (StringUtils.hasText(toUpdate.getBeerName())) {
             savedBeer.setBeerName(toUpdate.getBeerName());
@@ -130,6 +130,7 @@ public class BeerServiceImpl implements BeerService {
         savedBeer.setUpdatedDate(LocalDateTime.now());
 
         beerMap.put(id, savedBeer);
+        return null;
     }
 
     @Override

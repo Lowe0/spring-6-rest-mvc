@@ -55,7 +55,9 @@ public class BeerController {
 
     @PatchMapping(value = BEER_PATH_ID)
     public ResponseEntity deltaBeerById(@PathVariable("beerId") UUID id, @RequestBody BeerDto toUpdate) {
-        beerService.deltaBeerById(id, toUpdate);
+        beerService.deltaBeerById(id, toUpdate).ifPresentOrElse(x -> {}, () -> {
+            throw new NotFoundException();
+        });
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", BEER_PATH + "/" + id);

@@ -55,8 +55,15 @@ public class BeerServiceJPA implements BeerService {
     }
 
     @Override
-    public void deltaBeerById(UUID id, BeerDto toUpdate) {
+    public Optional<BeerDto> deltaBeerById(UUID id, BeerDto toUpdate) {
+        AtomicReference<Optional<BeerDto>> refUpdated = new AtomicReference<>();
 
+        beerRepository.findById(id).ifPresentOrElse(x -> {
+            beerMapper.deltaBeerFromBeerDto(toUpdate, x);
+            beerRepository.save(x);
+            refUpdated.set(Optional.of(beerMapper.beerToBeerDto(x)));
+        }, () -> refUpdated.set(Optional.empty()));
+        return refUpdated.get();
     }
 
     @Override

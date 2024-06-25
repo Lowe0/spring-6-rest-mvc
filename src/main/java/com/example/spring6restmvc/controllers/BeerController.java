@@ -69,7 +69,7 @@ public class BeerController {
     public ResponseEntity deleteBeerById(@PathVariable("beerId") UUID id) {
         if (!beerService.deleteBeerById(id)) {
             throw new NotFoundException();
-        };
+        }
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }

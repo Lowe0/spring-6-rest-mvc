@@ -111,6 +111,32 @@ class BeerControllerTest {
     }
 
     @Test
+    void addBeerNotValidNameIsNull() throws Exception {
+        BeerDto beer = BeerDto.builder().build();
+
+        given(beerService.addBeer(any(BeerDto.class))).willReturn(beerServiceImpl.listBeers().iterator().next());
+
+        mockMvc.perform(post(BEER_PATH)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beer)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void addBeerNotValidNameIsEmpty() throws Exception {
+        BeerDto beer = BeerDto.builder().beerName("").build();
+
+        given(beerService.addBeer(any(BeerDto.class))).willReturn(beerServiceImpl.listBeers().iterator().next());
+
+        mockMvc.perform(post(BEER_PATH)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beer)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void updateBeer() throws Exception {
         BeerDto beer = beerServiceImpl.listBeers().iterator().next();
 

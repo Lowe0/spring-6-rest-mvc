@@ -48,8 +48,7 @@ public class BeerServiceJPA implements BeerService {
             x.setBeerStyle(toUpdate.getBeerStyle());
             x.setUpc(toUpdate.getUpc());
             x.setPrice(toUpdate.getPrice());
-            beerRepository.save(x);
-            refUpdated.set(Optional.of(beerMapper.beerToBeerDto(x)));
+            refUpdated.set(Optional.of(beerMapper.beerToBeerDto(beerRepository.save(x))));
         }, () -> refUpdated.set(Optional.empty()));
         return refUpdated.get();
     }
@@ -60,8 +59,7 @@ public class BeerServiceJPA implements BeerService {
 
         beerRepository.findById(id).ifPresentOrElse(x -> {
             beerMapper.deltaBeerFromBeerDto(toUpdate, x);
-            beerRepository.save(x);
-            refUpdated.set(Optional.of(beerMapper.beerToBeerDto(x)));
+            refUpdated.set(Optional.of(beerMapper.beerToBeerDto(beerRepository.save(x))));
         }, () -> refUpdated.set(Optional.empty()));
         return refUpdated.get();
     }

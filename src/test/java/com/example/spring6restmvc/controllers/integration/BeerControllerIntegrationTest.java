@@ -1,5 +1,7 @@
-package com.example.spring6restmvc.controllers;
+package com.example.spring6restmvc.controllers.integration;
 
+import com.example.spring6restmvc.controllers.BeerController;
+import com.example.spring6restmvc.controllers.NotFoundException;
 import com.example.spring6restmvc.entities.Beer;
 import com.example.spring6restmvc.mappers.BeerMapper;
 import com.example.spring6restmvc.model.BeerDto;

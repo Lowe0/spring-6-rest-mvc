@@ -1,5 +1,7 @@
-package com.example.spring6restmvc.controllers;
+package com.example.spring6restmvc.controllers.integration;
 
+import com.example.spring6restmvc.controllers.CustomerController;
+import com.example.spring6restmvc.controllers.NotFoundException;
 import com.example.spring6restmvc.entities.Customer;
 import com.example.spring6restmvc.mappers.CustomerMapper;
 import com.example.spring6restmvc.model.CustomerDto;

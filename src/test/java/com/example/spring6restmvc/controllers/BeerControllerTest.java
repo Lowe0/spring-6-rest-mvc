@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -116,11 +117,12 @@ class BeerControllerTest {
 
         given(beerService.addBeer(any(BeerDto.class))).willReturn(beerServiceImpl.listBeers().iterator().next());
 
-        mockMvc.perform(post(BEER_PATH)
+        MvcResult response = mockMvc.perform(post(BEER_PATH)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beer)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andReturn();
     }
 
     @Test
@@ -129,11 +131,12 @@ class BeerControllerTest {
 
         given(beerService.addBeer(any(BeerDto.class))).willReturn(beerServiceImpl.listBeers().iterator().next());
 
-        mockMvc.perform(post(BEER_PATH)
+        MvcResult response = mockMvc.perform(post(BEER_PATH)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beer)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andReturn();
     }
 
     @Test

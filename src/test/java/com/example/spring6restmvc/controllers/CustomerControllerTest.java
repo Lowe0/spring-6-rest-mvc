@@ -15,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -63,7 +62,7 @@ class CustomerControllerTest {
 
     @Test
     void getCustomerById() throws Exception {
-        CustomerDto testCustomer = customerServiceImpl.listCustomers().iterator().next();
+        var testCustomer = customerServiceImpl.listCustomers().iterator().next();
 
         given(customerService.getCustomerById(testCustomer.getId())).willReturn(Optional.of(testCustomer));
         mockMvc.perform(get(CUSTOMER_PATH_ID, testCustomer.getId()).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$.id").value(testCustomer.getId().toString())).andExpect(jsonPath("$.customerName").value(testCustomer.getCustomerName()));
@@ -80,7 +79,7 @@ class CustomerControllerTest {
 
     @Test
     void addCustomer() throws Exception {
-        CustomerDto testCustomer = customerServiceImpl.listCustomers().iterator().next();
+        var testCustomer = customerServiceImpl.listCustomers().iterator().next();
         testCustomer.setVersion(null);
         testCustomer.setId(null);
 
@@ -93,7 +92,7 @@ class CustomerControllerTest {
 
     @Test
     void updateCustomer() throws Exception {
-        CustomerDto testCustomer = customerServiceImpl.listCustomers().iterator().next();
+        var testCustomer = customerServiceImpl.listCustomers().iterator().next();
 
         given(customerService.updateCustomerById(any(UUID.class), any(CustomerDto.class))).willReturn(Optional.of(testCustomer));
         mockMvc.perform(put(CUSTOMER_PATH_ID, testCustomer.getId()).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(testCustomer))).andExpect(status().isNoContent());
@@ -104,7 +103,7 @@ class CustomerControllerTest {
 
     @Test
     void deleteCustomer() throws Exception {
-        CustomerDto testCustomer = customerServiceImpl.listCustomers().iterator().next();
+        var testCustomer = customerServiceImpl.listCustomers().iterator().next();
 
         given(customerService.deleteCustomerById(any(UUID.class))).willReturn(true);
         mockMvc.perform(delete(CUSTOMER_PATH_ID, testCustomer.getId()).accept(MediaType.APPLICATION_JSON)).andExpect(status().isNoContent());
@@ -115,9 +114,9 @@ class CustomerControllerTest {
 
     @Test
     void deltaCustomer() throws Exception {
-        CustomerDto testCustomer = customerServiceImpl.listCustomers().iterator().next();
+        var testCustomer = customerServiceImpl.listCustomers().iterator().next();
 
-        Map<String, Object> customerMap = new HashMap<>();
+        var customerMap = new HashMap<String, Object>();
         customerMap.put("customerName", "New Name");
 
         given(customerService.deltaCustomerById(any(UUID.class), any(CustomerDto.class))).willReturn(Optional.of(testCustomer));

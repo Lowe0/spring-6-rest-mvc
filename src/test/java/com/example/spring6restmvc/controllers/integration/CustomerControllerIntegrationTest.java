@@ -2,7 +2,6 @@ package com.example.spring6restmvc.controllers.integration;
 
 import com.example.spring6restmvc.controllers.CustomerController;
 import com.example.spring6restmvc.controllers.NotFoundException;
-import com.example.spring6restmvc.entities.Customer;
 import com.example.spring6restmvc.mappers.CustomerMapper;
 import com.example.spring6restmvc.model.CustomerDto;
 import com.example.spring6restmvc.repositories.CustomerRepository;
@@ -30,7 +29,7 @@ class CustomerControllerIntegrationTest {
 
     @Test
     void listCustomers() {
-        List<CustomerDto> customers = customerController.listCustomers();
+        var customers = customerController.listCustomers();
         assertThat(customers).isNotNull();
         assertThat(customers.size()).isEqualTo(2);
     }
@@ -40,15 +39,15 @@ class CustomerControllerIntegrationTest {
     @Test
     void listCustomers_Empty() {
         customerRepository.deleteAll();
-        List<CustomerDto> customers = customerController.listCustomers();
+        var customers = customerController.listCustomers();
         assertThat(customers).isNotNull();
         assertThat(customers.size()).isEqualTo(0);
     }
 
     @Test
     void getCustomerById() {
-        Customer customer = customerRepository.findAll().get(0);
-        CustomerDto customerDto = customerController.getCustomerById(customer.getId());
+        var customer = customerRepository.findAll().get(0);
+        var customerDto = customerController.getCustomerById(customer.getId());
         assertThat(customerDto).isNotNull();
         assertThat(customerDto.getId()).isEqualTo(customer.getId());
     }
@@ -62,7 +61,7 @@ class CustomerControllerIntegrationTest {
     @Rollback
     @Test
     void addCustomer() {
-        CustomerDto toAdd = CustomerDto.builder().customerName("New Customer").build();
+        var toAdd = CustomerDto.builder().customerName("New Customer").build();
 
         var response = customerController.addCustomer(toAdd);
         assertThat(response).isNotNull();

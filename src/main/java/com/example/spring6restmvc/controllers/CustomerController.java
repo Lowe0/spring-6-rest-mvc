@@ -30,9 +30,9 @@ public class CustomerController {
 
     @PostMapping(CUSTOMER_PATH)
     public ResponseEntity addCustomer(@RequestBody CustomerDto toAdd) {
-        CustomerDto savedCustomer = customerService.addCustomer(toAdd);
+        var savedCustomer = customerService.addCustomer(toAdd);
 
-        HttpHeaders headers = new HttpHeaders();
+        var headers = new HttpHeaders();
         headers.add("Location", CUSTOMER_PATH + "/" + savedCustomer.getId());
 
         return new ResponseEntity(headers, HttpStatus.CREATED);
@@ -43,7 +43,7 @@ public class CustomerController {
         customerService.updateCustomerById(id, toUpdate).ifPresentOrElse(x -> {},
                 () -> {throw new NotFoundException();});
 
-        HttpHeaders headers = new HttpHeaders();
+        var headers = new HttpHeaders();
         headers.add("Location", CUSTOMER_PATH + "/" + id);
 
         return new ResponseEntity(headers, HttpStatus.NO_CONTENT);
@@ -54,7 +54,7 @@ public class CustomerController {
         customerService.deltaCustomerById(id, toUpdate).ifPresentOrElse(x -> {},
                 () -> {throw new NotFoundException();});
 
-        HttpHeaders headers = new HttpHeaders();
+        var headers = new HttpHeaders();
         headers.add("Location", CUSTOMER_PATH + "/" + id);
 
         return new ResponseEntity(headers, HttpStatus.NO_CONTENT);

@@ -15,10 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.math.BigDecimal;
+import java.util.*;
 
 import static com.example.spring6restmvc.controllers.BeerController.BEER_PATH;
 import static com.example.spring6restmvc.controllers.BeerController.BEER_PATH_ID;
@@ -113,7 +111,10 @@ class BeerControllerTest {
 
     @Test
     void addBeerNotValidNameIsNull() throws Exception {
-        BeerDto beer = BeerDto.builder().build();
+        BeerDto beer = beerServiceImpl.listBeers().iterator().next();
+        beer.setVersion(null);
+        beer.setId(null);
+        beer.setBeerName(null);
 
         given(beerService.addBeer(any(BeerDto.class))).willReturn(beerServiceImpl.listBeers().iterator().next());
 
@@ -123,11 +124,20 @@ class BeerControllerTest {
                         .content(objectMapper.writeValueAsString(beer)))
                 .andExpect(status().isBadRequest())
                 .andReturn();
+
+        var errorMaps = objectMapper.readValue(response.getResponse().getContentAsString(), ArrayList.class);
+        assertThat(errorMaps).anyMatch(x -> {
+            var errorMap = (LinkedHashMap<String, String>) x;
+            return errorMap.containsKey("beerName") && errorMap.get("beerName").equals("must not be null");
+        });
     }
 
     @Test
     void addBeerNotValidNameIsEmpty() throws Exception {
-        BeerDto beer = BeerDto.builder().beerName("").build();
+        BeerDto beer = beerServiceImpl.listBeers().iterator().next();
+        beer.setVersion(null);
+        beer.setId(null);
+        beer.setBeerName("");
 
         given(beerService.addBeer(any(BeerDto.class))).willReturn(beerServiceImpl.listBeers().iterator().next());
 
@@ -137,6 +147,127 @@ class BeerControllerTest {
                         .content(objectMapper.writeValueAsString(beer)))
                 .andExpect(status().isBadRequest())
                 .andReturn();
+
+        var errorMaps = objectMapper.readValue(response.getResponse().getContentAsString(), ArrayList.class);
+        assertThat(errorMaps).anyMatch(x -> {
+            var errorMap = (LinkedHashMap<String, String>) x;
+            return errorMap.containsKey("beerName") && errorMap.get("beerName").equals("must not be blank");
+        });
+    }
+
+    @Test
+    void addBeerNotValidBeerStyleIsNull() throws Exception {
+        BeerDto beer = beerServiceImpl.listBeers().iterator().next();
+        beer.setVersion(null);
+        beer.setId(null);
+        beer.setBeerStyle(null);
+
+        given(beerService.addBeer(any(BeerDto.class))).willReturn(beerServiceImpl.listBeers().iterator().next());
+
+        MvcResult response = mockMvc.perform(post(BEER_PATH)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beer)))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        var errorMaps = objectMapper.readValue(response.getResponse().getContentAsString(), ArrayList.class);
+        assertThat(errorMaps).anyMatch(x -> {
+            var errorMap = (LinkedHashMap<String, String>) x;
+            return errorMap.containsKey("beerStyle") && errorMap.get("beerStyle").equals("must not be null");
+        });
+    }
+
+    @Test
+    void addBeerNotValidUpcIsNull() throws Exception {
+        BeerDto beer = beerServiceImpl.listBeers().iterator().next();
+        beer.setVersion(null);
+        beer.setId(null);
+        beer.setUpc(null);
+
+        given(beerService.addBeer(any(BeerDto.class))).willReturn(beerServiceImpl.listBeers().iterator().next());
+
+        MvcResult response = mockMvc.perform(post(BEER_PATH)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beer)))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        var errorMaps = objectMapper.readValue(response.getResponse().getContentAsString(), ArrayList.class);
+        assertThat(errorMaps).anyMatch(x -> {
+            var errorMap = (LinkedHashMap<String, String>) x;
+            return errorMap.containsKey("upc") && errorMap.get("upc").equals("must not be null");
+        });
+    }
+
+    @Test
+    void addBeerNotValidUpcIsEmpty() throws Exception {
+        BeerDto beer = beerServiceImpl.listBeers().iterator().next();
+        beer.setVersion(null);
+        beer.setId(null);
+        beer.setUpc("");
+
+        given(beerService.addBeer(any(BeerDto.class))).willReturn(beerServiceImpl.listBeers().iterator().next());
+
+        MvcResult response = mockMvc.perform(post(BEER_PATH)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beer)))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        var errorMaps = objectMapper.readValue(response.getResponse().getContentAsString(), ArrayList.class);
+        assertThat(errorMaps).anyMatch(x -> {
+            var errorMap = (LinkedHashMap<String, String>) x;
+            return errorMap.containsKey("upc") && errorMap.get("upc").equals("must not be blank");
+        });
+    }
+
+    @Test
+    void addBeerNotValidPriceIsNull() throws Exception {
+        BeerDto beer = beerServiceImpl.listBeers().iterator().next();
+        beer.setVersion(null);
+        beer.setId(null);
+        beer.setPrice(null);
+
+        given(beerService.addBeer(any(BeerDto.class))).willReturn(beerServiceImpl.listBeers().iterator().next());
+
+        MvcResult response = mockMvc.perform(post(BEER_PATH)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beer)))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        var errorMaps = objectMapper.readValue(response.getResponse().getContentAsString(), ArrayList.class);
+        assertThat(errorMaps).anyMatch(x -> {
+            var errorMap = (LinkedHashMap<String, String>) x;
+            return errorMap.containsKey("price") && errorMap.get("price").equals("must not be null");
+        });
+    }
+
+    @Test
+    void addBeerNotValidPriceIsNegative() throws Exception {
+        BeerDto beer = beerServiceImpl.listBeers().iterator().next();
+        beer.setVersion(null);
+        beer.setId(null);
+        beer.setPrice(BigDecimal.valueOf(-9.99));
+
+        given(beerService.addBeer(any(BeerDto.class))).willReturn(beerServiceImpl.listBeers().iterator().next());
+
+        MvcResult response = mockMvc.perform(post(BEER_PATH)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beer)))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        var errorMaps = objectMapper.readValue(response.getResponse().getContentAsString(), ArrayList.class);
+        assertThat(errorMaps).anyMatch(x -> {
+            var errorMap = (LinkedHashMap<String, String>) x;
+            return errorMap.containsKey("price") && errorMap.get("price").equals("must be greater than or equal to 0");
+        });
     }
 
     @Test
@@ -154,6 +285,21 @@ class BeerControllerTest {
         verify(beerService).updateBeerById(uuidArgumentCaptor.capture(), beerArgumentCaptor.capture());
         assertThat(uuidArgumentCaptor.getValue()).isEqualTo(beer.getId());
     }
+
+    @Test
+    void updateBeerNotValidBeerNameIsNull() throws Exception {}
+
+    @Test
+    void updateBeerNotValidBeerNameIsEmpty() throws Exception {}
+
+    @Test
+    void updateBeerNotValidBeerStyleIsNull() throws Exception {}
+
+    @Test
+    void updateBeerNotValidUpcIsNull() throws Exception {}
+
+    @Test
+    void updateBeerNotValidPriceIsNull() throws Exception {}
 
     @Test
     void deleteBeer() throws Exception {

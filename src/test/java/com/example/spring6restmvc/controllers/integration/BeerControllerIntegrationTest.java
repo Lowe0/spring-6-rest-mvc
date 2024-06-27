@@ -6,19 +6,27 @@ import com.example.spring6restmvc.entities.Beer;
 import com.example.spring6restmvc.mappers.BeerMapper;
 import com.example.spring6restmvc.model.BeerDto;
 import com.example.spring6restmvc.repositories.BeerRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
+import static com.example.spring6restmvc.controllers.BeerController.BEER_PATH_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 class BeerControllerIntegrationTest {
@@ -28,6 +36,16 @@ class BeerControllerIntegrationTest {
     BeerRepository beerRepository;
     @Autowired
     BeerMapper beerMapper;
+    @Autowired
+    WebApplicationContext wac;
+    @Autowired
+    ObjectMapper objectMapper;
+
+    MockMvc mockMvc;
+    @BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+    }
 
     @Test
     void listBeers() {
@@ -136,6 +154,27 @@ class BeerControllerIntegrationTest {
     @Test
     void deltaBeer_NotFound_ThrowsException() {
         assertThrows(NotFoundException.class, () -> beerController.deltaBeerById(UUID.randomUUID(), BeerDto.builder().build()));
+    }
+
+    @Test
+    void deltaBeer_nameTooLong_ThrowsException() throws Exception{
+        Beer beer = beerRepository.findAll().get(0);
+
+        Map<String, Object> beerMap = new HashMap<>();
+        beerMap.put("beerName", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+
+        var result = mockMvc.perform(patch(BEER_PATH_ID, beer.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(beerMap)))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        var errorMaps = objectMapper.readValue(result.getResponse().getContentAsString(), ArrayList.class);
+        assertThat(errorMaps).anyMatch(x -> {
+            var errorMap = (LinkedHashMap<String, String>) x;
+            return errorMap.containsKey("beerName") && errorMap.get("beerName").equals("size must be between 0 and 50");
+        });
     }
 
     @Transactional

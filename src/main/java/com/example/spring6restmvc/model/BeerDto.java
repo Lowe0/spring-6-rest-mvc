@@ -1,9 +1,6 @@
 package com.example.spring6restmvc.model;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Data;
 
@@ -18,6 +15,7 @@ public class BeerDto {
     private Integer version;
     @NotNull
     @NotBlank
+    @Size(max = 50)
     private String beerName;
     @NotNull
     private BeerStyle beerStyle;

@@ -8,8 +8,10 @@ import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -24,7 +26,8 @@ import java.util.UUID;
 public class Beer {
     @Id
     @UuidGenerator
-    @Column(columnDefinition = "varchar", length = 36, updatable = false, nullable = false)
+    @JdbcTypeCode(SqlTypes.CHAR)
+    @Column(columnDefinition = "varchar(36)", length = 36, updatable = false, nullable = false)
     private UUID id;
     @Version
     private Integer version;

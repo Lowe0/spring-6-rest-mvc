@@ -51,7 +51,7 @@ class BeerControllerIntegrationTest {
 
     @Test
     void listBeers() {
-        List<BeerDto> beerDtos = beerController.listBeers();
+        List<BeerDto> beerDtos = beerController.listBeers(null);
         assertThat(beerDtos).isNotNull();
         assertThat(beerDtos.size()).isEqualTo(2410);
     }
@@ -61,10 +61,18 @@ class BeerControllerIntegrationTest {
     @Test
     void listBeers_Empty() {
         beerRepository.deleteAll();
-        List<BeerDto> beerDtos = beerController.listBeers();
+        List<BeerDto> beerDtos = beerController.listBeers(null);
         assertThat(beerDtos).isNotNull();
         assertThat(beerDtos.size()).isEqualTo(0);
 
+    }
+
+    @Test
+    void listBeersByName() throws Exception {
+        mockMvc.perform(get(BeerController.BEER_PATH)
+                        .queryParam("beerName", "IPA"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size").value(100));
     }
 
     @Test
@@ -80,13 +88,7 @@ class BeerControllerIntegrationTest {
         assertThrows(NotFoundException.class, () -> beerController.getBeerById(UUID.randomUUID()));
     }
 
-    @Test
-    void getBeersByName() throws Exception {
-        mockMvc.perform(get(BeerController.BEER_PATH)
-                .queryParam("beerName", "IPA"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size").value(100));
-    }
+
 
     @Transactional
     @Rollback

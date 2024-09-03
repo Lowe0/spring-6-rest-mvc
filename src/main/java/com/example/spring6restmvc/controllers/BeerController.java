@@ -22,7 +22,7 @@ public class BeerController {
     public static final String BEER_PATH_ID = BEER_PATH + "/{beerId}";
 
     @GetMapping(value = BEER_PATH)
-    public List<BeerDto> listBeers() {
+    public List<BeerDto> listBeers(@RequestParam("beerName") String beerName) {
         return beerService.listBeers();
     }
 

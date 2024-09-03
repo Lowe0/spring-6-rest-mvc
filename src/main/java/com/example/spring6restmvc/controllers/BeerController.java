@@ -22,7 +22,7 @@ public class BeerController {
     public static final String BEER_PATH_ID = BEER_PATH + "/{beerId}";
 
     @GetMapping(value = BEER_PATH)
-    public List<BeerDto> listBeers(@RequestParam("beerName") String beerName) {
+    public List<BeerDto> listBeers(@RequestParam(name = "beerName", required = false) String beerName) {
         return beerService.listBeers();
     }
 
@@ -44,7 +44,8 @@ public class BeerController {
 
     @PutMapping(value = BEER_PATH_ID)
     public ResponseEntity updateBeerById(@PathVariable("beerId") UUID id, @Validated @RequestBody BeerDto toUpdate) {
-        beerService.updateBeerById(id, toUpdate).ifPresentOrElse(x -> {}, () -> {
+        beerService.updateBeerById(id, toUpdate).ifPresentOrElse(x -> {
+        }, () -> {
             throw new NotFoundException();
         });
 
@@ -56,7 +57,8 @@ public class BeerController {
 
     @PatchMapping(value = BEER_PATH_ID)
     public ResponseEntity deltaBeerById(@PathVariable("beerId") UUID id, @RequestBody BeerDto toUpdate) {
-        beerService.deltaBeerById(id, toUpdate).ifPresentOrElse(x -> {}, () -> {
+        beerService.deltaBeerById(id, toUpdate).ifPresentOrElse(x -> {
+        }, () -> {
             throw new NotFoundException();
         });
 

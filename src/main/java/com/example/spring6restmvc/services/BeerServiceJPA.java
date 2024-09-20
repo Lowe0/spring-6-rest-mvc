@@ -7,6 +7,7 @@ import com.example.spring6restmvc.repositories.BeerRepository;
 import com.example.spring6restmvc.specifications.BeerSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -28,10 +29,20 @@ public class BeerServiceJPA implements BeerService {
     public List<BeerDto> listBeers(String beerName) {
         List<Beer> beerList;
 
-        if (StringUtils.hasText(beerName)) {
-            beerList = listBeersByName(beerName);
-        } else {
+        List<Specification<Beer>> criteria = new ArrayList<>();
+
+        if (!StringUtils.isEmpty(beerName)) {
+            criteria.add(BeerSpecifications.beerNameLike("%" + beerName + "%"));
+        }
+
+        if (criteria.isEmpty()) {
             beerList = beerRepository.findAll();
+        } else {
+            Specification<Beer> spec = Specification.where(null);
+            for (Specification<Beer> criterion : criteria) {
+                spec = spec.and(criterion);
+            }
+            beerList = beerRepository.findAll(spec);
         }
 
         return beerList

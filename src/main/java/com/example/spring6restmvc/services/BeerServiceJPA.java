@@ -41,7 +41,7 @@ public class BeerServiceJPA implements BeerService {
     }
 
     private List<Beer> listBeersByName(String beerName) {
-        return beerRepository.findAll(BeerSpecifications.beerNameLike("IPA"));
+        return beerRepository.findAll(BeerSpecifications.beerNameLike("%" + beerName + "%"));
     }
 
     @Override

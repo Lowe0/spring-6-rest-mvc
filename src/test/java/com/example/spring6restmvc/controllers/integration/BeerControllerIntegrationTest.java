@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
@@ -70,10 +71,14 @@ class BeerControllerIntegrationTest {
 
     @Test
     void listBeersByName() throws Exception {
-        mockMvc.perform(get(BeerController.BEER_PATH)
-                        .queryParam("beerName", "IPA"))
+        MvcResult result = mockMvc.perform(get(BeerController.BEER_PATH)
+                        .queryParam("beerName", "%IPA%"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(336)));
+                .andReturn();
+
+        var beers = objectMapper.readValue(result.getResponse().getContentAsString(), ArrayList.class);
+        assertThat(beers).isNotNull();
+        assertThat(beers.size()).isEqualTo(336);
     }
 
     @Test

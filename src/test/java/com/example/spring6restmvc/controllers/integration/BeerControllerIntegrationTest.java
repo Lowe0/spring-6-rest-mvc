@@ -52,7 +52,7 @@ class BeerControllerIntegrationTest {
 
     @Test
     void listBeers() {
-        var beerDtos = beerController.listBeers(null,null, null, null);
+        var beerDtos = beerController.listBeers(null,null, null, null, null, null);
         assertThat(beerDtos).isNotNull();
         assertThat(beerDtos.getTotalElements()).isEqualTo(2410);
         assertThat(beerDtos.getContent()).isNotNull();
@@ -64,7 +64,7 @@ class BeerControllerIntegrationTest {
     @Test
     void listBeers_Empty() {
         beerRepository.deleteAll();
-        var beerDtos = beerController.listBeers(null, null, null, null);
+        var beerDtos = beerController.listBeers(null, null, null, null, null, null);
         assertThat(beerDtos).isNotNull();
         assertThat(beerDtos.getTotalElements()).isEqualTo(0);
 
@@ -108,6 +108,39 @@ class BeerControllerIntegrationTest {
                         .queryParam("beerStyle", BeerStyle.IPA.name())
                         .queryParam("pageSize", String.valueOf(pageSize))
                         .queryParam("pageNum", String.valueOf(pageNumber)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalElements").value(324))
+                .andExpect(jsonPath("$.content.length()").value(pageSize));
+    }
+
+    @Test
+    void listBeersByNameAndStyle_sortByName_page3() throws Exception {
+        int pageSize = 33;
+        int pageNumber = 2;    // I'm assuming pages are zero-indexed, so page 3 is index 2
+
+        mockMvc.perform(get(BeerController.BEER_PATH)
+                        .queryParam("beerName", "%IPA%")
+                        .queryParam("beerStyle", BeerStyle.IPA.name())
+                        .queryParam("pageSize", String.valueOf(pageSize))
+                        .queryParam("pageNum", String.valueOf(pageNumber))
+                        .queryParam("sortBy", "beerName"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalElements").value(324))
+                .andExpect(jsonPath("$.content.length()").value(pageSize));
+    }
+
+    @Test
+    void listBeersByNameAndStyle_sortByNameDesc_page3() throws Exception {
+        int pageSize = 33;
+        int pageNumber = 2;    // I'm assuming pages are zero-indexed, so page 3 is index 2
+
+        mockMvc.perform(get(BeerController.BEER_PATH)
+                        .queryParam("beerName", "%IPA%")
+                        .queryParam("beerStyle", BeerStyle.IPA.name())
+                        .queryParam("pageSize", String.valueOf(pageSize))
+                        .queryParam("pageNum", String.valueOf(pageNumber))
+                        .queryParam("sortDirection", "DESC")
+                        .queryParam("sortBy", "beerName"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalElements").value(324))
                 .andExpect(jsonPath("$.content.length()").value(pageSize));

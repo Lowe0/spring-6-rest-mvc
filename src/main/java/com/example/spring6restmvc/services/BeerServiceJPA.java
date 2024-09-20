@@ -15,12 +15,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 @Service
 @Primary
@@ -34,7 +30,7 @@ public class BeerServiceJPA implements BeerService {
     private final BeerMapper beerMapper;
 
     @Override
-    public Page<BeerDto> listBeers(String beerName, BeerStyle beerStyle, Integer pageNumber, Integer pageSize) {
+    public Page<BeerDto> listBeers(String beerName, BeerStyle beerStyle, Integer pageNumber, Integer pageSize, String sortDirection, String sortBy) {
         Page<Beer> beerPage;
 
         List<Specification<Beer>> criteria = new ArrayList<>();
@@ -46,7 +42,7 @@ public class BeerServiceJPA implements BeerService {
             criteria.add(BeerSpecifications.beerStyleEquals(beerStyle));
         }
 
-        PageRequest pageRequest = getPageRequest(pageNumber, pageSize, null, null);
+        PageRequest pageRequest = getPageRequest(pageNumber, pageSize, sortDirection, sortBy);
 
         if (criteria.isEmpty()) {
             beerPage = beerRepository.findAll(pageRequest);
@@ -112,9 +108,19 @@ public class BeerServiceJPA implements BeerService {
     private static PageRequest getPageRequest(Integer pageNumber, Integer pageSize, String sortDirection, String sortProperty) {
         int coalescedPageNumber = pageNumber == null ? DEFAULT_PAGE_NUMBER : pageNumber;
         int coalescedPageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;
-        Sort.Direction coalescedSortDirection = Sort.DEFAULT_DIRECTION;
-        String coalescedSortProperty = sortProperty == null ? DEFAULT_SORT_FIELD : sortProperty;
+        Sort.Direction coalescedSortDirection =  isValidSortDirection(sortDirection) ? Sort.Direction.fromString(sortDirection) : Sort.DEFAULT_DIRECTION;
+        String coalescedSortProperty = isValidProperty(sortProperty) ? sortProperty : DEFAULT_SORT_FIELD;
 
         return PageRequest.of(coalescedPageNumber, coalescedPageSize, Sort.by(coalescedSortDirection, coalescedSortProperty));
+    }
+
+    private static boolean isValidSortDirection(String sortDirection) {
+        var validDirections = List.of("asc", "desc");
+        return StringUtils.hasText(sortDirection) && validDirections.contains(sortDirection.toLowerCase(Locale.ROOT));
+    }
+
+    private static boolean isValidProperty(String sortProperty) {
+        var validProperties = List.of("id", "beerName", "beerStyle", "price", "upc");
+        return StringUtils.hasText(sortProperty) && validProperties.contains(sortProperty);
     }
 }

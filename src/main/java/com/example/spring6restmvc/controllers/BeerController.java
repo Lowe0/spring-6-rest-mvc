@@ -27,8 +27,10 @@ public class BeerController {
             @RequestParam(name = "beerName", required = false) String beerName,
             @RequestParam(name = "beerStyle", required = false) BeerStyle beerStyle,
             @RequestParam(name = "pageNumber", required = false) Integer pageNumber,
-            @RequestParam(name = "pageSize", required = false) Integer pageSize) {
-        return beerService.listBeers(beerName, beerStyle, pageNumber, pageSize);
+            @RequestParam(name = "pageSize", required = false) Integer pageSize,
+            @RequestParam(name = "sortDirection", required = false) String sortDirection,
+            @RequestParam(name = "sortBy", required = false) String sortBy) {
+        return beerService.listBeers(beerName, beerStyle, pageNumber, pageSize, null, sortBy);
     }
 
     @GetMapping(value = BEER_PATH_ID)

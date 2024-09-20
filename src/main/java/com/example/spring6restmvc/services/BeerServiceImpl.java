@@ -66,7 +66,7 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public Page<BeerDto> listBeers(String beerName, BeerStyle beerStyle, Integer pageNumber, Integer pageSize) {
+    public Page<BeerDto> listBeers(String beerName, BeerStyle beerStyle, Integer pageNumber, Integer pageSize, String sortDirection, String sortBy) {
         return new PageImpl<>(beerMap.values().stream().toList());
     }
 

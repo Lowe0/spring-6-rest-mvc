@@ -7,7 +7,11 @@ import com.example.spring6restmvc.model.BeerStyle;
 import com.example.spring6restmvc.repositories.BeerRepository;
 import com.example.spring6restmvc.specifications.BeerSpecifications;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.query.SortDirection;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -23,11 +27,15 @@ import java.util.stream.Collectors;
 @Primary
 @RequiredArgsConstructor
 public class BeerServiceJPA implements BeerService {
+    private static final int DEFAULT_PAGE_NUMBER = 0;
+    private static final int DEFAULT_PAGE_SIZE = 50;
+    private static final String DEFAULT_SORT_FIELD = "id";
+
     private final BeerRepository beerRepository;
     private final BeerMapper beerMapper;
 
     @Override
-    public List<BeerDto> listBeers(String beerName, BeerStyle beerStyle) {
+    public List<BeerDto> listBeers(String beerName, BeerStyle beerStyle, Integer pageNumber, Integer pageSize) {
         List<Beer> beerList;
 
         List<Specification<Beer>> criteria = new ArrayList<>();
@@ -35,10 +43,11 @@ public class BeerServiceJPA implements BeerService {
         if (!StringUtils.isEmpty(beerName)) {
             criteria.add(BeerSpecifications.beerNameLike("%" + beerName + "%"));
         }
-
         if (beerStyle != null) {
             criteria.add(BeerSpecifications.beerStyleEquals(beerStyle));
         }
+
+        PageRequest pageRequest = getPageRequest(pageNumber, pageSize, null, null);
 
         if (criteria.isEmpty()) {
             beerList = beerRepository.findAll();
@@ -101,5 +110,14 @@ public class BeerServiceJPA implements BeerService {
             beerRepository.deleteById(id);
             return true;
         } else { return false; }
+    }
+
+    private static PageRequest getPageRequest(Integer pageNumber, Integer pageSize, String sortDirection, String sortProperty) {
+        int coalescedPageNumber = pageNumber == null ? DEFAULT_PAGE_NUMBER : pageNumber;
+        int coalescedPageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;
+        Sort.Direction coalescedSortDirection = Sort.DEFAULT_DIRECTION;
+        String coalescedSortProperty = sortProperty == null ? DEFAULT_SORT_FIELD : sortProperty;
+
+        return PageRequest.of(coalescedPageNumber, coalescedPageSize, Sort.by(coalescedSortDirection, coalescedSortProperty));
     }
 }

@@ -52,7 +52,7 @@ class BeerControllerIntegrationTest {
 
     @Test
     void listBeers() {
-        List<BeerDto> beerDtos = beerController.listBeers(null,null);
+        List<BeerDto> beerDtos = beerController.listBeers(null,null, null, null);
         assertThat(beerDtos).isNotNull();
         assertThat(beerDtos.size()).isEqualTo(2410);
     }
@@ -62,7 +62,7 @@ class BeerControllerIntegrationTest {
     @Test
     void listBeers_Empty() {
         beerRepository.deleteAll();
-        List<BeerDto> beerDtos = beerController.listBeers(null, null);
+        List<BeerDto> beerDtos = beerController.listBeers(null, null, null, null);
         assertThat(beerDtos).isNotNull();
         assertThat(beerDtos.size()).isEqualTo(0);
 
@@ -103,6 +103,24 @@ class BeerControllerIntegrationTest {
         var beers = objectMapper.readValue(result.getResponse().getContentAsString(), ArrayList.class);
         assertThat(beers).isNotNull();
         assertThat(beers.size()).isEqualTo(324);
+    }
+
+    @Test
+    void listBeersByNameAndStyle_page2() throws Exception {
+        int pageSize = 33;
+        int pageNumber = 1;    // I'm assuming pages are zero-indexed, so page 2 is index 1
+
+        MvcResult result = mockMvc.perform(get(BeerController.BEER_PATH)
+                        .queryParam("beerName", "%IPA%")
+                        .queryParam("beerStyle", BeerStyle.IPA.name())
+                        .queryParam("pageSize", String.valueOf(pageSize))
+                        .queryParam("pageNum", String.valueOf(pageNumber)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        var beers = objectMapper.readValue(result.getResponse().getContentAsString(), ArrayList.class);
+        assertThat(beers).isNotNull();
+        assertThat(beers.size()).isEqualTo(pageSize);
     }
 
     @Test

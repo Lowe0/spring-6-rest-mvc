@@ -3,6 +3,7 @@ package com.example.spring6restmvc.services;
 import com.example.spring6restmvc.entities.Beer;
 import com.example.spring6restmvc.mappers.BeerMapper;
 import com.example.spring6restmvc.model.BeerDto;
+import com.example.spring6restmvc.model.BeerStyle;
 import com.example.spring6restmvc.repositories.BeerRepository;
 import com.example.spring6restmvc.specifications.BeerSpecifications;
 import lombok.RequiredArgsConstructor;
@@ -26,13 +27,17 @@ public class BeerServiceJPA implements BeerService {
     private final BeerMapper beerMapper;
 
     @Override
-    public List<BeerDto> listBeers(String beerName) {
+    public List<BeerDto> listBeers(String beerName, BeerStyle beerStyle) {
         List<Beer> beerList;
 
         List<Specification<Beer>> criteria = new ArrayList<>();
 
         if (!StringUtils.isEmpty(beerName)) {
             criteria.add(BeerSpecifications.beerNameLike("%" + beerName + "%"));
+        }
+
+        if (beerStyle != null) {
+            criteria.add(BeerSpecifications.beerStyleEquals(beerStyle));
         }
 
         if (criteria.isEmpty()) {

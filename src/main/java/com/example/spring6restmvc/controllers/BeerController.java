@@ -1,6 +1,7 @@
 package com.example.spring6restmvc.controllers;
 
 import com.example.spring6restmvc.model.BeerDto;
+import com.example.spring6restmvc.model.BeerStyle;
 import com.example.spring6restmvc.services.BeerService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,8 +23,10 @@ public class BeerController {
     public static final String BEER_PATH_ID = BEER_PATH + "/{beerId}";
 
     @GetMapping(value = BEER_PATH)
-    public List<BeerDto> listBeers(@RequestParam(name = "beerName", required = false) String beerName) {
-        return beerService.listBeers(beerName);
+    public List<BeerDto> listBeers(
+            @RequestParam(name = "beerName", required = false) String beerName,
+            @RequestParam(name = "beerStyle", required = false) BeerStyle beerStyle) {
+        return beerService.listBeers(beerName, beerStyle);
     }
 
     @GetMapping(value = BEER_PATH_ID)

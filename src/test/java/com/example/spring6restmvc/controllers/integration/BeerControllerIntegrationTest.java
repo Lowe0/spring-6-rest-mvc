@@ -5,6 +5,7 @@ import com.example.spring6restmvc.controllers.NotFoundException;
 import com.example.spring6restmvc.entities.Beer;
 import com.example.spring6restmvc.mappers.BeerMapper;
 import com.example.spring6restmvc.model.BeerDto;
+import com.example.spring6restmvc.model.BeerStyle;
 import com.example.spring6restmvc.repositories.BeerRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,11 +26,9 @@ import java.util.*;
 
 import static com.example.spring6restmvc.controllers.BeerController.BEER_PATH_ID;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -53,7 +52,7 @@ class BeerControllerIntegrationTest {
 
     @Test
     void listBeers() {
-        List<BeerDto> beerDtos = beerController.listBeers(null);
+        List<BeerDto> beerDtos = beerController.listBeers(null,null);
         assertThat(beerDtos).isNotNull();
         assertThat(beerDtos.size()).isEqualTo(2410);
     }
@@ -63,7 +62,7 @@ class BeerControllerIntegrationTest {
     @Test
     void listBeers_Empty() {
         beerRepository.deleteAll();
-        List<BeerDto> beerDtos = beerController.listBeers(null);
+        List<BeerDto> beerDtos = beerController.listBeers(null, null);
         assertThat(beerDtos).isNotNull();
         assertThat(beerDtos.size()).isEqualTo(0);
 
@@ -79,6 +78,18 @@ class BeerControllerIntegrationTest {
         var beers = objectMapper.readValue(result.getResponse().getContentAsString(), ArrayList.class);
         assertThat(beers).isNotNull();
         assertThat(beers.size()).isEqualTo(336);
+    }
+
+    @Test
+    void listBeersByStyle() throws Exception {
+        MvcResult result = mockMvc.perform(get(BeerController.BEER_PATH)
+                        .queryParam("beerStyle", BeerStyle.IPA.name()))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        var beers = objectMapper.readValue(result.getResponse().getContentAsString(), ArrayList.class);
+        assertThat(beers).isNotNull();
+        assertThat(beers.size()).isEqualTo(571);
     }
 
     @Test

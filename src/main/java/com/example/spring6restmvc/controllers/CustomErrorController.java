@@ -19,8 +19,7 @@ public class CustomErrorController {
         var responseBuilder = ResponseEntity.badRequest();
 
         if (ex.getCause() instanceof RollbackException) {
-            if (ex.getCause().getCause() instanceof ConstraintViolationException) {
-                var cvEx = (ConstraintViolationException) ex.getCause().getCause();
+            if (ex.getCause().getCause() instanceof ConstraintViolationException cvEx) {
 
                 var listErrors = cvEx.getConstraintViolations().stream().map(x -> {
                     var errorMap = new HashMap<String, String>();

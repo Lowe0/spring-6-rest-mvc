@@ -17,7 +17,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
@@ -29,6 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -52,9 +52,11 @@ class BeerControllerIntegrationTest {
 
     @Test
     void listBeers() {
-        List<BeerDto> beerDtos = beerController.listBeers(null,null, null, null);
+        var beerDtos = beerController.listBeers(null,null, null, null);
         assertThat(beerDtos).isNotNull();
-        assertThat(beerDtos.size()).isEqualTo(2410);
+        assertThat(beerDtos.getTotalElements()).isEqualTo(2410);
+        assertThat(beerDtos.getContent()).isNotNull();
+        assertThat(beerDtos.getContent().size()).isEqualTo(50);
     }
 
     @Transactional
@@ -62,47 +64,38 @@ class BeerControllerIntegrationTest {
     @Test
     void listBeers_Empty() {
         beerRepository.deleteAll();
-        List<BeerDto> beerDtos = beerController.listBeers(null, null, null, null);
+        var beerDtos = beerController.listBeers(null, null, null, null);
         assertThat(beerDtos).isNotNull();
-        assertThat(beerDtos.size()).isEqualTo(0);
+        assertThat(beerDtos.getTotalElements()).isEqualTo(0);
 
     }
 
     @Test
     void listBeersByName() throws Exception {
-        MvcResult result = mockMvc.perform(get(BeerController.BEER_PATH)
+        mockMvc.perform(get(BeerController.BEER_PATH)
                         .queryParam("beerName", "%IPA%"))
                 .andExpect(status().isOk())
-                .andReturn();
-
-        var beers = objectMapper.readValue(result.getResponse().getContentAsString(), ArrayList.class);
-        assertThat(beers).isNotNull();
-        assertThat(beers.size()).isEqualTo(336);
+                .andExpect(jsonPath("$.totalElements").value(336))
+                .andExpect(jsonPath("$.content.length()").value(50));
     }
 
     @Test
     void listBeersByStyle() throws Exception {
-        MvcResult result = mockMvc.perform(get(BeerController.BEER_PATH)
+        mockMvc.perform(get(BeerController.BEER_PATH)
                         .queryParam("beerStyle", BeerStyle.IPA.name()))
                 .andExpect(status().isOk())
-                .andReturn();
-
-        var beers = objectMapper.readValue(result.getResponse().getContentAsString(), ArrayList.class);
-        assertThat(beers).isNotNull();
-        assertThat(beers.size()).isEqualTo(571);
+                .andExpect(jsonPath("$.totalElements").value(571))
+                .andExpect(jsonPath("$.content.length()").value(50));
     }
 
     @Test
     void listBeersByNameAndStyle() throws Exception {
-        MvcResult result = mockMvc.perform(get(BeerController.BEER_PATH)
+        mockMvc.perform(get(BeerController.BEER_PATH)
                         .queryParam("beerName", "%IPA%")
                         .queryParam("beerStyle", BeerStyle.IPA.name()))
                 .andExpect(status().isOk())
-                .andReturn();
-
-        var beers = objectMapper.readValue(result.getResponse().getContentAsString(), ArrayList.class);
-        assertThat(beers).isNotNull();
-        assertThat(beers.size()).isEqualTo(324);
+                .andExpect(jsonPath("$.totalElements").value(324))
+                .andExpect(jsonPath("$.content.length()").value(50));
     }
 
     @Test
@@ -110,17 +103,14 @@ class BeerControllerIntegrationTest {
         int pageSize = 33;
         int pageNumber = 1;    // I'm assuming pages are zero-indexed, so page 2 is index 1
 
-        MvcResult result = mockMvc.perform(get(BeerController.BEER_PATH)
+        mockMvc.perform(get(BeerController.BEER_PATH)
                         .queryParam("beerName", "%IPA%")
                         .queryParam("beerStyle", BeerStyle.IPA.name())
                         .queryParam("pageSize", String.valueOf(pageSize))
                         .queryParam("pageNum", String.valueOf(pageNumber)))
                 .andExpect(status().isOk())
-                .andReturn();
-
-        var beers = objectMapper.readValue(result.getResponse().getContentAsString(), ArrayList.class);
-        assertThat(beers).isNotNull();
-        assertThat(beers.size()).isEqualTo(pageSize);
+                .andExpect(jsonPath("$.totalElements").value(324))
+                .andExpect(jsonPath("$.content.length()").value(pageSize));
     }
 
     @Test

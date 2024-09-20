@@ -5,6 +5,7 @@ import com.example.spring6restmvc.model.BeerStyle;
 import com.example.spring6restmvc.services.BeerService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
-import java.util.List;
 
 @Slf4j
 @AllArgsConstructor
@@ -23,7 +23,7 @@ public class BeerController {
     public static final String BEER_PATH_ID = BEER_PATH + "/{beerId}";
 
     @GetMapping(value = BEER_PATH)
-    public List<BeerDto> listBeers(
+    public Page<BeerDto> listBeers(
             @RequestParam(name = "beerName", required = false) String beerName,
             @RequestParam(name = "beerStyle", required = false) BeerStyle beerStyle,
             @RequestParam(name = "pageNumber", required = false) Integer pageNumber,

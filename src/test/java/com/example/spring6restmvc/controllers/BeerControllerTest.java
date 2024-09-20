@@ -56,7 +56,7 @@ class BeerControllerTest {
     void getAllBeers() throws Exception {
         given(beerService.listBeers(null, null, null, null)).willReturn(beerServiceImpl.listBeers(null, null, null, null));
 
-        mockMvc.perform(get(BEER_PATH)).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$.length()").value(3));
+        mockMvc.perform(get(BEER_PATH)).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$.content.length()").value(3));
 
         verify(beerService).listBeers(null, null, null, null);
     }

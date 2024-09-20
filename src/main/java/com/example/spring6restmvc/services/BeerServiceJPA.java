@@ -7,10 +7,9 @@ import com.example.spring6restmvc.model.BeerStyle;
 import com.example.spring6restmvc.repositories.BeerRepository;
 import com.example.spring6restmvc.specifications.BeerSpecifications;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.query.SortDirection;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -35,8 +34,8 @@ public class BeerServiceJPA implements BeerService {
     private final BeerMapper beerMapper;
 
     @Override
-    public List<BeerDto> listBeers(String beerName, BeerStyle beerStyle, Integer pageNumber, Integer pageSize) {
-        List<Beer> beerList;
+    public Page<BeerDto> listBeers(String beerName, BeerStyle beerStyle, Integer pageNumber, Integer pageSize) {
+        Page<Beer> beerPage;
 
         List<Specification<Beer>> criteria = new ArrayList<>();
 
@@ -50,19 +49,17 @@ public class BeerServiceJPA implements BeerService {
         PageRequest pageRequest = getPageRequest(pageNumber, pageSize, null, null);
 
         if (criteria.isEmpty()) {
-            beerList = beerRepository.findAll();
+            beerPage = beerRepository.findAll(pageRequest);
         } else {
             Specification<Beer> spec = Specification.where(null);
             for (Specification<Beer> criterion : criteria) {
                 spec = spec.and(criterion);
             }
-            beerList = beerRepository.findAll(spec);
+            beerPage = beerRepository.findAll(spec, pageRequest);
         }
 
-        return beerList
-                .stream()
-                .map(beerMapper::beerToBeerDto)
-                .collect(Collectors.toList());
+        return beerPage
+                .map(beerMapper::beerToBeerDto);
     }
 
     private List<Beer> listBeersByName(String beerName) {

@@ -4,6 +4,7 @@ import com.example.spring6restmvc.entities.Beer;
 import com.example.spring6restmvc.mappers.BeerMapper;
 import com.example.spring6restmvc.model.BeerDto;
 import com.example.spring6restmvc.repositories.BeerRepository;
+import com.example.spring6restmvc.specifications.BeerSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,7 @@ public class BeerServiceJPA implements BeerService {
     }
 
     private List<Beer> listBeersByName(String beerName) {
-        return beerRepository.findAllByBeerNameIsLikeIgnoreCase("%" + beerName + "%");
+        return beerRepository.findAll(BeerSpecifications.beerNameLike("IPA"));
     }
 
     @Override

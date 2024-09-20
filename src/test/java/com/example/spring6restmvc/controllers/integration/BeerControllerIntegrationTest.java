@@ -93,6 +93,19 @@ class BeerControllerIntegrationTest {
     }
 
     @Test
+    void listBeersByNameAndStyle() throws Exception {
+        MvcResult result = mockMvc.perform(get(BeerController.BEER_PATH)
+                        .queryParam("beerName", "%IPA%")
+                        .queryParam("beerStyle", BeerStyle.IPA.name()))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        var beers = objectMapper.readValue(result.getResponse().getContentAsString(), ArrayList.class);
+        assertThat(beers).isNotNull();
+        assertThat(beers.size()).isEqualTo(324);
+    }
+
+    @Test
     void getBeerById() {
         Beer beer = beerRepository.findAll().get(0);
         BeerDto beerDto = beerController.getBeerById(beer.getId());

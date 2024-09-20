@@ -4,6 +4,7 @@ import com.example.spring6restmvc.bootstrap.BootstrapData;
 import com.example.spring6restmvc.entities.Beer;
 import com.example.spring6restmvc.model.BeerStyle;
 import com.example.spring6restmvc.services.csv.BeerCsvServiceImpl;
+import com.example.spring6restmvc.specifications.BeerSpecifications;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,8 +55,7 @@ class BeerRepositoryTest {
 
     @Test
     void listBeersByName() {
-        List<Beer> list = beerRepository.findAllByBeerNameIsLikeIgnoreCase("%IPA%");
-
+        List<Beer> list = beerRepository.findAll(BeerSpecifications.beerNameLike("IPA"));
         assertThat(list).isNotNull();
         assertThat(list.size()).isEqualTo(336); // number of matches in CSV data in resources
     }

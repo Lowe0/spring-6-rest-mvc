@@ -8,6 +8,6 @@ import java.util.Locale;
 public class BeerSpecifications {
 
     public static Specification<Beer> beerNameLike(String nameFragment) {
-        return ((root, query, criteriaBuilder) -> criteriaBuilder.like(criteriaBuilder.lower(root.get("beerName")), "%" + nameFragment.toLowerCase(Locale.ROOT) + "%"));
+        return ((root, query, criteriaBuilder) -> criteriaBuilder.like(criteriaBuilder.lower(root.get("beerName")), nameFragment.toLowerCase(Locale.ROOT)));
     }
 }

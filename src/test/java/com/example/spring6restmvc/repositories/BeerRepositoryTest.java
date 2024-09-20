@@ -55,7 +55,7 @@ class BeerRepositoryTest {
 
     @Test
     void listBeersByName() {
-        List<Beer> list = beerRepository.findAll(BeerSpecifications.beerNameLike("IPA"));
+        List<Beer> list = beerRepository.findAll(BeerSpecifications.beerNameLike("%IPA%"));
         assertThat(list).isNotNull();
         assertThat(list.size()).isEqualTo(336); // number of matches in CSV data in resources
     }

@@ -1,1 +1,0 @@
-alter table beer rename column updated_date to last_modified_date;

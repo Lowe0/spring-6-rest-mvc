@@ -9,6 +9,7 @@ import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -34,6 +35,7 @@ public class Customer {
     private Instant createdDate;
     @UpdateTimestamp
     private Instant lastModifiedDate;
+    @Builder.Default
     @OneToMany(mappedBy = "customer")
-    private Set<BeerOrder> orders;
+    private Set<BeerOrder> orders = new HashSet<>();
 }

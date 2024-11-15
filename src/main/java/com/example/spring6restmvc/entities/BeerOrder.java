@@ -16,7 +16,6 @@ import java.util.UUID;
 @Setter
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class BeerOrder {
     @Id
@@ -26,14 +25,29 @@ public class BeerOrder {
     private UUID id;
     @Version
     private Long version;
+    private String customerRef;
     @CreationTimestamp
     @Column(updatable = false)
     private Instant createdDate;
     @UpdateTimestamp
     private Instant lastModifiedDate;
-    private String customerRef;
     @ManyToOne
     private Customer customer;
     @OneToMany(mappedBy = "beerOrder")
     private Set<BeerOrderLine> lines;
+
+    public BeerOrder(UUID id, Long version, String customerRef, Instant createdDate, Instant lastModifiedDate, Customer customer, Set<BeerOrderLine> lines) {
+        this.id = id;
+        this.version = version;
+        this.customerRef = customerRef;
+        this.createdDate = createdDate;
+        this.lastModifiedDate = lastModifiedDate;
+        this.setCustomer(customer);
+        this.lines = lines;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+        customer.getOrders().add(this);
+    }
 }

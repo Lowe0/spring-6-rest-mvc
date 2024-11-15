@@ -18,6 +18,7 @@ import org.springframework.util.ResourceUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
@@ -73,13 +74,13 @@ public class BootstrapData implements CommandLineRunner {
         if (customerRepository.count() == 0) {
             Customer kevin = Customer.builder()
                     .customerName("Kevin Lowe")
-                    .createdDate(LocalDateTime.now())
-                    .lastModifiedDate(LocalDateTime.now()).build();
+                    .createdDate(Instant.now())
+                    .lastModifiedDate(Instant.now()).build();
 
             Customer cassi = Customer.builder()
                     .customerName("Cassi Lowe")
-                    .createdDate(LocalDateTime.now())
-                    .lastModifiedDate(LocalDateTime.now()).build();
+                    .createdDate(Instant.now())
+                    .lastModifiedDate(Instant.now()).build();
 
             log.debug("Initializing customer");
             customerRepository.save(kevin);

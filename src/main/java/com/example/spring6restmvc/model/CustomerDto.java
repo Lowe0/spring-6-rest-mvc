@@ -3,7 +3,7 @@ package com.example.spring6restmvc.model;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 @Data
@@ -13,6 +13,6 @@ public class CustomerDto {
     private Integer version;
     private String customerName;
     private String email;
-    private LocalDateTime createdDate;
-    private LocalDateTime lastModifiedDate;
+    private Instant createdDate;
+    private Instant lastModifiedDate;
 }

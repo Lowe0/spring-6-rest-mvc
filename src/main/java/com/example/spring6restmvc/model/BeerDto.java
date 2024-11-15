@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 @Data
@@ -26,6 +26,6 @@ public class BeerDto {
     @NotNull
     @PositiveOrZero
     private BigDecimal price;
-    private LocalDateTime createdDate;
-    private LocalDateTime updatedDate;
+    private Instant createdDate;
+    private Instant updatedDate;
 }

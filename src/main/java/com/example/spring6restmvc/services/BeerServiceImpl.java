@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -32,8 +33,8 @@ public class BeerServiceImpl implements BeerService {
                 .upc("01 11111 00000 10")
                 .price(new BigDecimal("12.99"))
                 .quantityOnHand(99)
-                .createdDate(LocalDateTime.now())
-                .updatedDate(LocalDateTime.now())
+                .createdDate(Instant.now())
+                .updatedDate(Instant.now())
                 .build();
 
         BeerDto osiris = BeerDto.builder()
@@ -44,8 +45,8 @@ public class BeerServiceImpl implements BeerService {
                 .upc("01 11111 00002 11")
                 .price(new BigDecimal("12.99"))
                 .quantityOnHand(99)
-                .createdDate(LocalDateTime.now())
-                .updatedDate(LocalDateTime.now())
+                .createdDate(Instant.now())
+                .updatedDate(Instant.now())
                 .build();
 
         BeerDto weeMac = BeerDto.builder()
@@ -56,8 +57,8 @@ public class BeerServiceImpl implements BeerService {
                 .upc("01 11111 00003 20")
                 .price(new BigDecimal("12.99"))
                 .quantityOnHand(99)
-                .createdDate(LocalDateTime.now())
-                .updatedDate(LocalDateTime.now())
+                .createdDate(Instant.now())
+                .updatedDate(Instant.now())
                 .build();
 
         beerMap.put(sunlight.getId(), sunlight);
@@ -81,8 +82,8 @@ public class BeerServiceImpl implements BeerService {
         BeerDto savedBeer = BeerDto.builder()
                 .id(UUID.randomUUID())
                 .version(1)
-                .createdDate(LocalDateTime.now())
-                .updatedDate(LocalDateTime.now())
+                .createdDate(Instant.now())
+                .updatedDate(Instant.now())
                 .beerName(toAdd.getBeerName())
                 .beerStyle(toAdd.getBeerStyle())
                 .quantityOnHand(toAdd.getQuantityOnHand())
@@ -104,7 +105,7 @@ public class BeerServiceImpl implements BeerService {
         savedBeer.setUpc(toUpdate.getUpc());
         savedBeer.setPrice(toUpdate.getPrice());
         savedBeer.setVersion(savedBeer.getVersion() + 1);
-        savedBeer.setUpdatedDate(LocalDateTime.now());
+        savedBeer.setUpdatedDate(Instant.now());
 
         beerMap.put(id, savedBeer);
         return Optional.of(savedBeer);
@@ -129,7 +130,7 @@ public class BeerServiceImpl implements BeerService {
             savedBeer.setPrice(toUpdate.getPrice());
         }
         savedBeer.setVersion(savedBeer.getVersion() + 1);
-        savedBeer.setUpdatedDate(LocalDateTime.now());
+        savedBeer.setUpdatedDate(Instant.now());
 
         beerMap.put(id, savedBeer);
         return null;

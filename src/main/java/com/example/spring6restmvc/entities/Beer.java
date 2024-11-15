@@ -14,7 +14,7 @@ import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 @Getter
@@ -46,7 +46,7 @@ public class Beer {
     @PositiveOrZero
     private BigDecimal price;
     @CreationTimestamp
-    private LocalDateTime createdDate;
+    private Instant createdDate;
     @UpdateTimestamp
-    private LocalDateTime updatedDate;
+    private Instant updatedDate;
 }

@@ -29,6 +29,7 @@ public class Customer {
     @Column(length = 255)
     private String email;
     @CreationTimestamp
+    @Column(updatable = false)
     private Instant createdDate;
     @UpdateTimestamp
     private Instant lastModifiedDate;

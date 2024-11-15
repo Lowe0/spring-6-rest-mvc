@@ -46,6 +46,7 @@ public class Beer {
     @PositiveOrZero
     private BigDecimal price;
     @CreationTimestamp
+    @Column(updatable = false)
     private Instant createdDate;
     @UpdateTimestamp
     private Instant lastModifiedDate;

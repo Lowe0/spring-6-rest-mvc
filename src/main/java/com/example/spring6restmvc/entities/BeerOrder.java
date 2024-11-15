@@ -31,6 +31,7 @@ public class BeerOrder {
     private Instant createdDate;
     @UpdateTimestamp
     private Instant lastModifiedDate;
+    private String customerRef;
     @ManyToOne
     private Customer customer;
     @OneToMany(mappedBy = "beerOrder")

@@ -10,7 +10,6 @@ import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Slf4j
@@ -34,7 +33,7 @@ public class BeerServiceImpl implements BeerService {
                 .price(new BigDecimal("12.99"))
                 .quantityOnHand(99)
                 .createdDate(Instant.now())
-                .updatedDate(Instant.now())
+                .lastModifiedDate(Instant.now())
                 .build();
 
         BeerDto osiris = BeerDto.builder()
@@ -46,7 +45,7 @@ public class BeerServiceImpl implements BeerService {
                 .price(new BigDecimal("12.99"))
                 .quantityOnHand(99)
                 .createdDate(Instant.now())
-                .updatedDate(Instant.now())
+                .lastModifiedDate(Instant.now())
                 .build();
 
         BeerDto weeMac = BeerDto.builder()
@@ -58,7 +57,7 @@ public class BeerServiceImpl implements BeerService {
                 .price(new BigDecimal("12.99"))
                 .quantityOnHand(99)
                 .createdDate(Instant.now())
-                .updatedDate(Instant.now())
+                .lastModifiedDate(Instant.now())
                 .build();
 
         beerMap.put(sunlight.getId(), sunlight);
@@ -83,7 +82,7 @@ public class BeerServiceImpl implements BeerService {
                 .id(UUID.randomUUID())
                 .version(1)
                 .createdDate(Instant.now())
-                .updatedDate(Instant.now())
+                .lastModifiedDate(Instant.now())
                 .beerName(toAdd.getBeerName())
                 .beerStyle(toAdd.getBeerStyle())
                 .quantityOnHand(toAdd.getQuantityOnHand())
@@ -105,7 +104,7 @@ public class BeerServiceImpl implements BeerService {
         savedBeer.setUpc(toUpdate.getUpc());
         savedBeer.setPrice(toUpdate.getPrice());
         savedBeer.setVersion(savedBeer.getVersion() + 1);
-        savedBeer.setUpdatedDate(Instant.now());
+        savedBeer.setLastModifiedDate(Instant.now());
 
         beerMap.put(id, savedBeer);
         return Optional.of(savedBeer);
@@ -130,7 +129,7 @@ public class BeerServiceImpl implements BeerService {
             savedBeer.setPrice(toUpdate.getPrice());
         }
         savedBeer.setVersion(savedBeer.getVersion() + 1);
-        savedBeer.setUpdatedDate(Instant.now());
+        savedBeer.setLastModifiedDate(Instant.now());
 
         beerMap.put(id, savedBeer);
         return null;

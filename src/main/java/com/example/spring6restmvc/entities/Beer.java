@@ -48,5 +48,5 @@ public class Beer {
     @CreationTimestamp
     private Instant createdDate;
     @UpdateTimestamp
-    private Instant updatedDate;
+    private Instant lastModifiedDate;
 }

@@ -27,5 +27,5 @@ public class BeerDto {
     @PositiveOrZero
     private BigDecimal price;
     private Instant createdDate;
-    private Instant updatedDate;
+    private Instant lastModifiedDate;
 }

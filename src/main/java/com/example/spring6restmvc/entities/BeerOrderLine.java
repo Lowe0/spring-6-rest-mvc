@@ -9,7 +9,6 @@ import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
 
 import java.time.Instant;
-import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -18,7 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BeerOrder {
+public class BeerOrderLine {
     @Id
     @UuidGenerator
     @JdbcTypeCode(SqlTypes.CHAR)
@@ -31,8 +30,10 @@ public class BeerOrder {
     private Instant createdDate;
     @UpdateTimestamp
     private Instant lastModifiedDate;
+    private int orderQuantity;
+    private int quantityAllocated;
     @ManyToOne
-    private Customer customer;
-    @OneToMany(mappedBy = "beerOrder")
-    private Set<BeerOrderLine> lines;
+    BeerOrder beerOrder;
+    @OneToOne
+    Beer beer;
 }

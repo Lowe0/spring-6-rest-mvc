@@ -9,31 +9,27 @@ import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
 
 import java.time.Instant;
-import java.util.Set;
 import java.util.UUID;
 
 @Getter
 @Setter
 @Entity
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class Customer {
+@AllArgsConstructor
+@Builder
+public class BeerOrder {
     @Id
     @UuidGenerator
     @JdbcTypeCode(SqlTypes.CHAR)
     @Column(columnDefinition = "varchar(36)", length = 36, updatable = false, nullable = false)
     private UUID id;
     @Version
-    private Integer version;
-    private String customerName;
-    @Column(length = 255)
-    private String email;
+    private Long version;
     @CreationTimestamp
     @Column(updatable = false)
     private Instant createdDate;
     @UpdateTimestamp
     private Instant lastModifiedDate;
-    @OneToMany(mappedBy = "customer")
-    private Set<BeerOrder> orders;
+    @ManyToOne
+    private Customer customer;
 }
